@@ -2,7 +2,7 @@ package edu.jhu.cs.gyifan1.oose;
 
 import edu.jhu.cs.oose.fall2013.brickus.iface.BrickusEvent;
 
-public class MyBrickusPiece {
+public class MyBrickusPiece implements edu.jhu.cs.oose.fall2013.brickus.iface.BrickusPiece {
 	
 	public MyBrickusPiece(int height, int width, int[][] occupiedGrids, MyBrickusModel brickusModel) throws java.lang.IndexOutOfBoundsException {
 		this.height = height;
@@ -21,50 +21,69 @@ public class MyBrickusPiece {
 		}
 	}
 	
-	void flipHorizontally() {
+	public void flipHorizontally() {
 		for (int i = 0; i < height / 2; i++) {
 			for (int j = 0; j < width; j++) {
-				boolean temp;
-				temp = pieceGrid[i][j];
-				pieceGrid[i][j] = pieceGrid[height - i][j];
-				pieceGrid[height - i][j] = temp;
+				pieceGrid[i][j] = pieceGrid[i][j] ^ pieceGrid[height - i - 1][j];
+				pieceGrid[height - i - 1][j] = pieceGrid[i][j] ^ pieceGrid[height - i -1][j];
+				pieceGrid[i][j] = pieceGrid[i][j] ^ pieceGrid[height - i - 1][j];
 			}
 		}
 		notifyModelPieceChanged();
 	}
-	void flipVertically() {
+	public void flipVertically() {
 		for (int i = 0; i < height; i++) {
 			for (int j = 0; j < width / 2; j++) {
-				boolean temp;
-				temp = pieceGrid[i][j];
-				pieceGrid[i][j] = pieceGrid[i][width - j];
-				pieceGrid[i][width - j] = temp;
+				pieceGrid[i][j] = pieceGrid[i][j] ^ pieceGrid[i][width - j - 1];
+				pieceGrid[i][width - j - 1] = pieceGrid[i][j] ^ pieceGrid[i][width - j - 1];
+				pieceGrid[i][j] = pieceGrid[i][j] ^ pieceGrid[i][width - j - 1];
 			}
 		}
 		notifyModelPieceChanged();
 	}
-	int getHeight() {
+	public int getHeight() {
 		return height;
 	}
-	int getWidth() {
+	public int getWidth() {
 		return width;
 	}
-	boolean isOccupied(int x, int y) throws java.lang.IndexOutOfBoundsException {
-		return pieceGrid[x][y];
+	public boolean isOccupied(int x, int y) throws java.lang.IndexOutOfBoundsException {
+		return pieceGrid[y][x];
 	}
-	void rotateClockwise() {
-		// XXX
+	public void rotateClockwise() {
+		height = height + width;
+		width = height - width;
+		height = height - width;
+		boolean[][] newPieceGrid = new boolean[height][width];
+		for (int i = 0; i < height; i++) {
+			for (int j = 0; j < width; j++) {
+				newPieceGrid[i][j] = pieceGrid[width - j - 1][i];
+			}
+		}
+		pieceGrid = newPieceGrid;
+		// leave garbage collection to do the rest
 		notifyModelPieceChanged();
 	}
-	void rotateCounterClockwise() {
-		// XXX
+	public void rotateCounterClockwise() {
+		height = height + width;
+		width = height - width;
+		height = height - width;
+		boolean[][] newPieceGrid = new boolean[height][width];
+		for (int i = 0; i < height; i++) {
+			for (int j = 0; j < width; j++) {
+				newPieceGrid[i][j] = pieceGrid[j][height - i - 1];
+			}
+		}
+		pieceGrid = newPieceGrid;
+		// leave garbage collection to do the rest
 		notifyModelPieceChanged();
+	}
+	
+	private void notifyModelPieceChanged() {
+		brickusModel.notifyModelChanged(new BrickusEvent(brickusModel, false, false));
 	}
 private
 	boolean[][] pieceGrid;
 	int height, width;
 	MyBrickusModel brickusModel;
-	void notifyModelPieceChanged() {
-		brickusModel.notifyModelChanged(new BrickusEvent(brickusModel, false, false));
-	}
 }
