@@ -152,60 +152,22 @@ public class MyBrickusModel implements BrickusModel {
 		}
 	}
 	private boolean checkDiagonal(Player player, int x, int y) {
-		try {
-			if (getContents(x - 1, y - 1) == player)
-				return true;
-		} catch (IndexOutOfBoundsException e) {
-			// ignore
-		}
-		
-		try {
-			if (getContents(x - 1, y + 1) == player)
-				return true;
-		} catch (IndexOutOfBoundsException e) {
-			// ignore
-		}
-		try {
-			if (getContents(x + 1, y - 1) == player)
-				return true;
-		} catch (IndexOutOfBoundsException e) {
-			// ignore
-		}
-		try {
-			if (getContents(x + 1, y + 1) == player)
-				return true;
-		} catch (IndexOutOfBoundsException e) {
-			// ignore
-		}
-		return false;
+		if (((x - 1 >= 0) && (y - 1 >= 0) && (getContents(x - 1, y - 1) == player)) ||
+				((x - 1 >= 0) && (y + 1 <= height - 1) && (getContents(x - 1, y + 1) == player)) ||
+				((x + 1 <= width - 1) && (y - 1 >= 0) && (getContents(x + 1, y - 1) == player)) ||
+				((x + 1 <= width - 1) && (y + 1 <= height - 1) && (getContents(x + 1, y + 1) == player))) 
+			return true;
+		else
+			return false;
 	}
 	private boolean checkOrthogonal(Player player, int x, int y) {
-		try {
-			if (getContents(x - 1, y) == player)
-				return false;
-		} catch (IndexOutOfBoundsException e) {
-			// ignore
-		}
-		
-		try {
-			if (getContents(x + 1, y) == player)
-				return false;
-		} catch (IndexOutOfBoundsException e) {
-			// ignore
-		}
-		try {
-			if (getContents(x, y - 1) == player)
-				return false;
-		} catch (IndexOutOfBoundsException e) {
-			// ignore
-		}
-		try {
-			if (getContents(x, y + 1) == player)
-				return false;
-		} catch (IndexOutOfBoundsException e) {
-			// ignore
-		}
-		return true;
+		if (((x - 1 >= 0) && (getContents(x - 1, y) == player)) ||
+				((x + 1 <= width - 1) && (getContents(x + 1, y) == player)) ||
+				((y - 1 >= 0) && (getContents(x, y - 1) == player)) ||
+				((y + 1 <= height - 1) && (getContents(x, y + 1) == player)))
+			return false;
+		else
+			return true;
 	}
 	private boolean validatePiecesSameColorNoSideTouch(Player player, int x, int y, BrickusPiece piece) {
 		for (int i = 0; i < piece.getWidth(); i++)
