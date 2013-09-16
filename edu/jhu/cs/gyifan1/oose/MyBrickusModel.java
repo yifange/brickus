@@ -10,7 +10,8 @@ import edu.jhu.cs.oose.fall2013.brickus.iface.*;
 import edu.jhu.cs.gyifan1.oose.BrickusIllegalMoveException;
 
 /**
- * Self implemented Brickus model
+ * Implemented Brickus model
+ * Provides all the logics of the Brickus game.
  * @author	Yifan Ge
  */
 public class MyBrickusModel implements BrickusModel {
@@ -265,7 +266,7 @@ public class MyBrickusModel implements BrickusModel {
 	 * @param x		X coordinate of the location.
 	 * @param y		Y coordinate of the location.
 	 * @param piece	The piece to be placed on the board.
-	 * @return 	Whether the piece is placed wholly on the board.
+	 * @return 	true if the piece is placed wholly on the board, false if the piece is not placed on the board completely.
 	 */
 	private boolean validatePieceOnBoard(int x, int y, BrickusPiece piece) {
 		if ((x >= 0) && (x + piece.getWidth() <= width) && (y >= 0) && (y + piece.getHeight() <= height))
@@ -279,7 +280,7 @@ public class MyBrickusModel implements BrickusModel {
 	 * @param x				X coordinate of the location.
 	 * @param y				Y coordinate of the location.
 	 * @param piece		The piece to be placed on the board.
-	 * @return				Whether the piece touches some same color piece diagonally.
+	 * @return				True if the piece touches some same color piece diagonally, false if it does not.
 	 */
 	private boolean validatePiecesSameColorDiagonal(Player player, int x, int y, BrickusPiece piece) {
 		if (calculateScore(player) == 0)
@@ -299,7 +300,7 @@ public class MyBrickusModel implements BrickusModel {
 	 * @param player	The player for whom a piece is to be placed.
 	 * @param x				X coordinate of the location.
 	 * @param y				Y coordinate of the location.
-	 * @return				Whether a same color gird exists in one of the diagonal grids.
+	 * @return				True if there is a same color gird existing in one of the diagonal grids of the given location, false if there is not.
 	 */
 	private boolean checkDiagonal(Player player, int x, int y) {
 		if (((x - 1 >= 0) && (y - 1 >= 0) && (getContents(x - 1, y - 1) == player)) ||
@@ -316,7 +317,7 @@ public class MyBrickusModel implements BrickusModel {
 	 * @param player	The player for whom a piece is to be placed.
 	 * @param x				X coordinate of the location.
 	 * @param y				Y coordinate of the location.
-	 * @return				Whether no same color girds exist in the orthogonal grids.
+	 * @return				True if no same color girds exist in the orthogonal grids, false if there is any.
 	 */
 	private boolean checkOrthogonal(Player player, int x, int y) {
 		if (((x - 1 >= 0) && (getContents(x - 1, y) == player)) ||
@@ -410,32 +411,6 @@ public class MyBrickusModel implements BrickusModel {
     pieceSet.add(new MyBrickusPiece(2, 2, "1101", this));
     pieceSet.add(new MyBrickusPiece(1, 2, "11", this));
     pieceSet.add(new MyBrickusPiece(1, 1, "1", this));
-
-
-
-
-
-		/* pieceSet.add(new MyBrickusPiece(3, 3, new int[][] {{0, 1}, {1, 0}, {1, 2}, {2, 1}}, new int[][] {{1, 1}}, this)); */
-		/* pieceSet.add(new MyBrickusPiece(3, 3, new int[][] {{0, 0}, {1, 0}, {1, 2}, {2, 1}}, new int[][] {{1, 1}}, this)); */
-		/* pieceSet.add(new MyBrickusPiece(3, 3, new int[][] {{0, 0}, {0, 2}, {2, 1}}, new int[][] {{0, 1}, {1, 1}}, this)); */
-		/* pieceSet.add(new MyBrickusPiece(2, 4, new int[][] {{0, 0}, {0, 3}, {1, 3}}, new int[][] {{0, 1}, {0, 2}}, this)); */
-		/* pieceSet.add(new MyBrickusPiece(1, 5, new int[][] {{0, 0}, {0, 4}}, new int[][] {{0, 1}, {0, 2}, {0, 3}}, this)); */
-		/* pieceSet.add(new MyBrickusPiece(3, 3, new int[][] {{0, 0}, {0, 1}, {2, 1}, {2, 2}}, new int[][] {{1, 1}}, this)); */
-		/* pieceSet.add(new MyBrickusPiece(3, 2, new int[][] {{0, 0}, {0, 1}, {2, 0}, {2, 1}}, new int[][] {{1, 1}}, this)); */
-		/* pieceSet.add(new MyBrickusPiece(3, 2, new int[][] {{0, 0}, {0, 1}, {1, 0}, {2, 1}}, new int[][] {{1, 1}}, this)); */
-		/* pieceSet.add(new MyBrickusPiece(3, 3, new int[][] {{0, 0}, {1, 0}, {1, 1}, {2, 1}, {2, 2}}, new int[0][0], this)); */
-		/* pieceSet.add(new MyBrickusPiece(2, 4, new int[][] {{0, 0}, {0, 1}, {1, 1}, {1, 3}}, new int[][] {{1, 2}}, this)); */
-		/* pieceSet.add(new MyBrickusPiece(2, 4, new int[][] {{0, 0}, {0, 3}, {1, 1}}, new int[][] {{0, 1}, {0, 2}}, this)); */
-		/* pieceSet.add(new MyBrickusPiece(3, 3, new int[][] {{0, 0}, {0, 2}, {2, 2}}, new int[][] {{0, 1}, {1, 2}}, this)); */
-		/* pieceSet.add(new MyBrickusPiece(1, 4, new int[][] {{0, 0}, {0, 3}}, new int[][] {{0, 1}, {0, 2}}, this)); */
-		/* pieceSet.add(new MyBrickusPiece(2, 3, new int[][] {{0, 0}, {0, 2}, {1, 2}}, new int[][] {{0, 1}}, this)); */
-		/* pieceSet.add(new MyBrickusPiece(2, 3, new int[][] {{0, 0}, {0, 2}, {1, 1}}, new int[][] {{0, 1}}, this)); */
-		/* pieceSet.add(new MyBrickusPiece(2, 3, new int[][] {{0, 0}, {0, 1}, {1, 1}, {1, 2}}, new int[0][0], this)); */
-		/* pieceSet.add(new MyBrickusPiece(2, 2, new int[][] {{0, 0}, {0, 1}, {1, 0}, {1, 1}}, new int[0][0], this)); */
-		/* pieceSet.add(new MyBrickusPiece(1, 3, new int[][] {{0, 0}, {0, 2}}, new int[][] {{0, 1}}, this)); */
-		/* pieceSet.add(new MyBrickusPiece(2, 2, new int[][] {{0, 0}, {0, 1}, {1, 1}}, new int[0][0], this)); */
-		/* pieceSet.add(new MyBrickusPiece(1, 2, new int[][] {{0, 0}, {0, 1}}, new int[0][0], this)); */
-		/* pieceSet.add(new MyBrickusPiece(1, 1, new int[][] {{0, 0}}, new int[0][0], this)); */
 		return pieceSet;
 	}
 private

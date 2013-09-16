@@ -7,6 +7,7 @@ package edu.jhu.cs.gyifan1.oose;
  */
 public class BrickusIllegalMoveException extends Exception {
 	public BrickusIllegalMoveException(String message) {
+		// call the constructor of the super class (Exception)
 		super(message);
 	}
 }
