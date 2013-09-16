@@ -288,7 +288,10 @@ public class MyBrickusModel implements BrickusModel {
 		else {
 			for (int i = 0; i < piece.getWidth(); i++)
 				for (int j = 0; j < piece.getHeight(); j++)
-					// Only needs to check to girds that have been marked as CORNER
+					// There is no need to distinguish the corner grids and the non-corner grids of the piece. 
+					// Here we simply check each of the grids occupied by the piece, if there is no same colored grids among them,
+					// we can assert that this piece cannot touch any same color pieces diagonally.
+					// For the grids that we should not consider as a diagonal grids, we will rule them out in the validation of side grids.
 					if (piece.isOccupied(i, j) && checkDiagonal(player, x + i, y + j))
 						return true;
 			return false;
