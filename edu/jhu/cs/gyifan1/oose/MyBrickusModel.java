@@ -20,8 +20,8 @@ public class MyBrickusModel implements BrickusModel {
 	public MyBrickusModel() {
 		brickusListeners = new ArrayList<BrickusListener>();
 		activePlayer = Player.PLAYER1;
-		height = 16; 
-		width = 16;
+		height = 14; 
+		width = 14;
 		board = new Player[height][width];
 		
 		// Use a hashmap to store the pieces of the two players
@@ -288,7 +288,7 @@ public class MyBrickusModel implements BrickusModel {
 			for (int i = 0; i < piece.getWidth(); i++)
 				for (int j = 0; j < piece.getHeight(); j++)
 					// Only needs to check to girds that have been marked as CORNER
-					if (((MyBrickusPiece) piece).isCorner(i, j) && checkDiagonal(player, x + i, y + j))
+					if (piece.isOccupied(i, j) && checkDiagonal(player, x + i, y + j))
 						return true;
 			return false;
 		}
@@ -389,27 +389,53 @@ public class MyBrickusModel implements BrickusModel {
 	 */
 	private List<BrickusPiece> brickusPieceSet() {
 		List<BrickusPiece> pieceSet = new ArrayList<BrickusPiece>();
-		pieceSet.add(new MyBrickusPiece(3, 3, new int[][] {{0, 1}, {1, 0}, {1, 2}, {2, 1}}, new int[][] {{1, 1}}, this));
-		pieceSet.add(new MyBrickusPiece(3, 3, new int[][] {{0, 0}, {1, 0}, {1, 2}, {2, 1}}, new int[][] {{1, 1}}, this));
-		pieceSet.add(new MyBrickusPiece(3, 3, new int[][] {{0, 0}, {0, 2}, {2, 1}}, new int[][] {{0, 1}, {1, 1}}, this));
-		pieceSet.add(new MyBrickusPiece(2, 4, new int[][] {{0, 0}, {0, 3}, {1, 3}}, new int[][] {{0, 1}, {0, 2}}, this));
-		pieceSet.add(new MyBrickusPiece(1, 5, new int[][] {{0, 0}, {0, 4}}, new int[][] {{0, 1}, {0, 2}, {0, 3}}, this));
-		pieceSet.add(new MyBrickusPiece(3, 3, new int[][] {{0, 0}, {0, 1}, {2, 1}, {2, 2}}, new int[][] {{1, 1}}, this));
-		pieceSet.add(new MyBrickusPiece(3, 2, new int[][] {{0, 0}, {0, 1}, {2, 0}, {2, 1}}, new int[][] {{1, 1}}, this));
-		pieceSet.add(new MyBrickusPiece(3, 2, new int[][] {{0, 0}, {0, 1}, {1, 0}, {2, 1}}, new int[][] {{1, 1}}, this));
-		pieceSet.add(new MyBrickusPiece(3, 3, new int[][] {{0, 0}, {1, 0}, {1, 1}, {2, 1}, {2, 2}}, new int[0][0], this));
-		pieceSet.add(new MyBrickusPiece(2, 4, new int[][] {{0, 0}, {0, 1}, {1, 1}, {1, 3}}, new int[][] {{1, 2}}, this));
-		pieceSet.add(new MyBrickusPiece(2, 4, new int[][] {{0, 0}, {0, 3}, {1, 1}}, new int[][] {{0, 1}, {0, 2}}, this));
-		pieceSet.add(new MyBrickusPiece(3, 3, new int[][] {{0, 0}, {0, 2}, {2, 2}}, new int[][] {{0, 1}, {1, 2}}, this));
-		pieceSet.add(new MyBrickusPiece(1, 4, new int[][] {{0, 0}, {0, 3}}, new int[][] {{0, 1}, {0, 2}}, this));
-		pieceSet.add(new MyBrickusPiece(2, 3, new int[][] {{0, 0}, {0, 2}, {1, 2}}, new int[][] {{0, 1}}, this));
-		pieceSet.add(new MyBrickusPiece(2, 3, new int[][] {{0, 0}, {0, 2}, {1, 1}}, new int[][] {{0, 1}}, this));
-		pieceSet.add(new MyBrickusPiece(2, 3, new int[][] {{0, 0}, {0, 1}, {1, 1}, {1, 2}}, new int[0][0], this));
-		pieceSet.add(new MyBrickusPiece(2, 2, new int[][] {{0, 0}, {0, 1}, {1, 0}, {1, 1}}, new int[0][0], this));
-		pieceSet.add(new MyBrickusPiece(1, 3, new int[][] {{0, 0}, {0, 2}}, new int[][] {{0, 1}}, this));
-		pieceSet.add(new MyBrickusPiece(2, 2, new int[][] {{0, 0}, {0, 1}, {1, 1}}, new int[0][0], this));
-		pieceSet.add(new MyBrickusPiece(1, 2, new int[][] {{0, 0}, {0, 1}}, new int[0][0], this));
-		pieceSet.add(new MyBrickusPiece(1, 1, new int[][] {{0, 0}}, new int[0][0], this));
+    pieceSet.add(new MyBrickusPiece(3, 3, "010111010", this));
+    pieceSet.add(new MyBrickusPiece(3, 3, "100111010", this));
+    pieceSet.add(new MyBrickusPiece(3, 3, "111010010", this));
+    pieceSet.add(new MyBrickusPiece(2, 4, "11110001", this));
+    pieceSet.add(new MyBrickusPiece(1, 5, "11111", this));
+    pieceSet.add(new MyBrickusPiece(3, 3, "110010011", this));
+    pieceSet.add(new MyBrickusPiece(3, 2, "110111", this));
+    pieceSet.add(new MyBrickusPiece(3, 2, "111101", this));
+    pieceSet.add(new MyBrickusPiece(3, 3, "100110011", this));
+    pieceSet.add(new MyBrickusPiece(2, 4, "11000111", this));
+    pieceSet.add(new MyBrickusPiece(2, 4, "11110100", this));
+    pieceSet.add(new MyBrickusPiece(3, 3, "111001001", this));
+    pieceSet.add(new MyBrickusPiece(1, 4, "1111", this));
+    pieceSet.add(new MyBrickusPiece(2, 3, "111001", this));
+    pieceSet.add(new MyBrickusPiece(2, 3, "111010", this));
+    pieceSet.add(new MyBrickusPiece(2, 3, "110011", this));
+    pieceSet.add(new MyBrickusPiece(2, 2, "1111", this));
+    pieceSet.add(new MyBrickusPiece(1, 3, "111", this));
+    pieceSet.add(new MyBrickusPiece(2, 2, "1101", this));
+    pieceSet.add(new MyBrickusPiece(1, 2, "11", this));
+    pieceSet.add(new MyBrickusPiece(1, 1, "1", this));
+
+
+
+
+
+		/* pieceSet.add(new MyBrickusPiece(3, 3, new int[][] {{0, 1}, {1, 0}, {1, 2}, {2, 1}}, new int[][] {{1, 1}}, this)); */
+		/* pieceSet.add(new MyBrickusPiece(3, 3, new int[][] {{0, 0}, {1, 0}, {1, 2}, {2, 1}}, new int[][] {{1, 1}}, this)); */
+		/* pieceSet.add(new MyBrickusPiece(3, 3, new int[][] {{0, 0}, {0, 2}, {2, 1}}, new int[][] {{0, 1}, {1, 1}}, this)); */
+		/* pieceSet.add(new MyBrickusPiece(2, 4, new int[][] {{0, 0}, {0, 3}, {1, 3}}, new int[][] {{0, 1}, {0, 2}}, this)); */
+		/* pieceSet.add(new MyBrickusPiece(1, 5, new int[][] {{0, 0}, {0, 4}}, new int[][] {{0, 1}, {0, 2}, {0, 3}}, this)); */
+		/* pieceSet.add(new MyBrickusPiece(3, 3, new int[][] {{0, 0}, {0, 1}, {2, 1}, {2, 2}}, new int[][] {{1, 1}}, this)); */
+		/* pieceSet.add(new MyBrickusPiece(3, 2, new int[][] {{0, 0}, {0, 1}, {2, 0}, {2, 1}}, new int[][] {{1, 1}}, this)); */
+		/* pieceSet.add(new MyBrickusPiece(3, 2, new int[][] {{0, 0}, {0, 1}, {1, 0}, {2, 1}}, new int[][] {{1, 1}}, this)); */
+		/* pieceSet.add(new MyBrickusPiece(3, 3, new int[][] {{0, 0}, {1, 0}, {1, 1}, {2, 1}, {2, 2}}, new int[0][0], this)); */
+		/* pieceSet.add(new MyBrickusPiece(2, 4, new int[][] {{0, 0}, {0, 1}, {1, 1}, {1, 3}}, new int[][] {{1, 2}}, this)); */
+		/* pieceSet.add(new MyBrickusPiece(2, 4, new int[][] {{0, 0}, {0, 3}, {1, 1}}, new int[][] {{0, 1}, {0, 2}}, this)); */
+		/* pieceSet.add(new MyBrickusPiece(3, 3, new int[][] {{0, 0}, {0, 2}, {2, 2}}, new int[][] {{0, 1}, {1, 2}}, this)); */
+		/* pieceSet.add(new MyBrickusPiece(1, 4, new int[][] {{0, 0}, {0, 3}}, new int[][] {{0, 1}, {0, 2}}, this)); */
+		/* pieceSet.add(new MyBrickusPiece(2, 3, new int[][] {{0, 0}, {0, 2}, {1, 2}}, new int[][] {{0, 1}}, this)); */
+		/* pieceSet.add(new MyBrickusPiece(2, 3, new int[][] {{0, 0}, {0, 2}, {1, 1}}, new int[][] {{0, 1}}, this)); */
+		/* pieceSet.add(new MyBrickusPiece(2, 3, new int[][] {{0, 0}, {0, 1}, {1, 1}, {1, 2}}, new int[0][0], this)); */
+		/* pieceSet.add(new MyBrickusPiece(2, 2, new int[][] {{0, 0}, {0, 1}, {1, 0}, {1, 1}}, new int[0][0], this)); */
+		/* pieceSet.add(new MyBrickusPiece(1, 3, new int[][] {{0, 0}, {0, 2}}, new int[][] {{0, 1}}, this)); */
+		/* pieceSet.add(new MyBrickusPiece(2, 2, new int[][] {{0, 0}, {0, 1}, {1, 1}}, new int[0][0], this)); */
+		/* pieceSet.add(new MyBrickusPiece(1, 2, new int[][] {{0, 0}, {0, 1}}, new int[0][0], this)); */
+		/* pieceSet.add(new MyBrickusPiece(1, 1, new int[][] {{0, 0}}, new int[0][0], this)); */
 		return pieceSet;
 	}
 private
