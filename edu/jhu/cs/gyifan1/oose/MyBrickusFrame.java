@@ -51,12 +51,12 @@ public class MyBrickusFrame extends javax.swing.JFrame {
 	public MyBrickusFrame(BrickusModel model) {
 		super("Brickus");
 		this.model = model;
+		setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 		statusBar = new MyBrickusStatusBar(this);
 		boardPanel = new MyBrickusBoardPanel(model, this);
 		pieceTrays = new HashMap<Player, MyBrickusPieceTray>();
 		pieceTrays.put(Player.PLAYER1, new MyBrickusPieceTray(model, this, Player.PLAYER1));
 		pieceTrays.put(Player.PLAYER2, new MyBrickusPieceTray(model, this, Player.PLAYER2));
-		setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 		setMinimumSize(new Dimension(MIN_WIDTH, MIN_HEIGHT));
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		updateComponentSize();
