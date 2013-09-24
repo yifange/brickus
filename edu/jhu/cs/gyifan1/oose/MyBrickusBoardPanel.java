@@ -42,9 +42,9 @@ public class MyBrickusBoardPanel extends JPanel {
 				add(grid);
 			}
 	}
-	public MyBrickusBoardPanel(BrickusModel model, JFrame frame) {
-		this.model = model;
+	public MyBrickusBoardPanel(MyBrickusFrame frame) {
 		this.frame = frame;
+		this.model = frame.getModel();
 		height = model.getHeight();
 		width = model.getWidth();
 		GridLayout gridLayout = new GridLayout(height, width);

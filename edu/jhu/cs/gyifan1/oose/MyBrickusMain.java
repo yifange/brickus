@@ -9,8 +9,7 @@ public class MyBrickusMain {
 	 * @param args	The arguments passed to main.
 	 */
 	public static void main(String[] args) {
-		 BrickusModel model = new edu.jhu.cs.oose.fall2013.brickus.model.StandardBrickusModel();
-     MyBrickusFrame gui = new MyBrickusFrame(model);
+     MyBrickusFrame gui = new MyBrickusFrame();
 //     gui.setResizable(false);
      
      gui.setLocationRelativeTo(null);
