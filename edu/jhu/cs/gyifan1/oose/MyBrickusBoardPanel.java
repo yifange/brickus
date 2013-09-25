@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
@@ -11,12 +13,15 @@ import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 
 import edu.jhu.cs.oose.fall2013.brickus.iface.BrickusModel;
+import edu.jhu.cs.oose.fall2013.brickus.iface.BrickusPiece;
 
 public class MyBrickusBoardPanel extends JPanel {
 	private BrickusModel model;
+	private MyBrickusPieceSelectionModel selectionModel;
 	private JFrame frame;
 	private MyBrickusBoardGridPanel[] boardGridPanels;
 	private int height, width;
+	private boolean mouseInBoard;
 	public void updateSize() {
 		int frameHeight = frame.getHeight();
 		int frameWidth = frame.getWidth();
@@ -36,25 +41,74 @@ public class MyBrickusBoardPanel extends JPanel {
 	public void paintBoard() {
 		for (int row = 0; row < height; row++)
 			for (int col = 0; col < width; col++) {
+				MyBrickusBoardGridPanel grid = boardGridPanels[row * width + col];
+				if (model.getContents(col, row) != null) {
+					grid.setOccupied(model.getContents(col, row));
+				} else {
+					grid.setUnoccupied();
+				}
+			}
+	}
+	public void createBoard() {
+		for (int row = 0; row < height; row++)
+			for (int col = 0; col < width; col++) {
 				MyBrickusBoardGridPanel grid = new MyBrickusBoardGridPanel(col, row);
-				grid.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
-				boardGridPanels[row * width + col] = grid;  
+				boardGridPanels[row * width + col] = grid;
+				
+				grid.addListener(new MyBrickusMouseLocationListener() {
+					@Override
+					public void mouseEnteredLocation(int x, int y) {
+						if (mouseInBoard) {
+							System.out.println("hello");
+							
+							BrickusPiece piece = selectionModel.selectedPiece;
+							for (int i = 0; i < piece.getHeight(); y++)
+								for (int j = 0; j < piece.getWidth(); x++) {
+									if (piece.isOccupied(j, x) && model.getContents(x + j, y + i) == null)
+										boardGridPanels[(y + i) * width + (x + j)].setHovered(model.getActivePlayer());
+								}
+						}
+						repaint();
+					}
+
+					@Override
+					public void mouseClickedLocation(int x, int y) {
+						model.placePiece(model.getActivePlayer(), x, y, selectionModel.getSelectedPiece());
+					}
+				});
 				add(grid);
 			}
+		
 	}
 	public MyBrickusBoardPanel(MyBrickusFrame frame) {
 		this.frame = frame;
 		this.model = frame.getModel();
+		this.selectionModel = frame.getSelectionModel();
 		height = model.getHeight();
 		width = model.getWidth();
 		GridLayout gridLayout = new GridLayout(height, width);
 		setLayout(gridLayout);
 		boardGridPanels = new MyBrickusBoardGridPanel[height * width];
-		System.out.println(getHeight());
-		paintBoard();
+		createBoard();
+		addMouseListener(new MouseHandler());
 	}
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		updateSize();
+		paintBoard();
+	}
+	
+	
+	
+	
+	private class MouseHandler extends MouseAdapter {
+		public void mouseEntered(MouseEvent event) {
+			mouseInBoard = true;
+			repaint();
+		}
+		public void mouseExited(MouseEvent event) {
+			mouseInBoard = false;
+			repaint();
+		}
 	}
 }

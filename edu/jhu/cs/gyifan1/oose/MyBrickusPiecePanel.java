@@ -46,10 +46,13 @@ public class MyBrickusPiecePanel extends JPanel {
 				add(gridPanel);
 			}
 	}
+	public void removeListener(MyBrickusPieceSelectionChangeListener listener) {
+		listeners.remove(listener);
+	}
 	public void addListener(MyBrickusPieceSelectionChangeListener listener) {
 		listeners.add(listener);
 	}
-	public void notifyAllListenersPieceSelectionChanged() {
+	public void notifyPieceSelectionChanged() {
 		for (MyBrickusPieceSelectionChangeListener listener : listeners) {
 			listener.pieceSelectionChanged(selectionModel);
 		}
@@ -84,7 +87,7 @@ public class MyBrickusPiecePanel extends JPanel {
 		public void mouseClicked(MouseEvent event) {
 			if (player == model.getActivePlayer()) {
 				selectionModel.setSelectedPiece(piece);
-				notifyAllListenersPieceSelectionChanged();
+				notifyPieceSelectionChanged();
 			}
 		}
 	}

@@ -50,10 +50,8 @@ public class MyBrickusPieceTray extends JPanel {
 			piecePanels[i] = new MyBrickusPiecePanel(piece, player, model, selectionModel);
 			add(piecePanels[i]);
 			piecePanels[i].addListener(new MyBrickusPieceSelectionChangeListener() {
-				
-				@Override
 				public void pieceSelectionChanged(MyBrickusPieceSelectionModel selectionModel) {
-					MyBrickusPieceTray.this.repaint();
+					repaint();
 				}
 			});
 		}

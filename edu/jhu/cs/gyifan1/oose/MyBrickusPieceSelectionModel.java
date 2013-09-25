@@ -1,7 +1,6 @@
 package edu.jhu.cs.gyifan1.oose;
 
 import edu.jhu.cs.oose.fall2013.brickus.iface.BrickusPiece;
-import edu.jhu.cs.oose.fall2013.brickus.iface.Player;
 
 public class MyBrickusPieceSelectionModel {
 	BrickusPiece selectedPiece;
