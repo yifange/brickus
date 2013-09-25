@@ -46,7 +46,7 @@ public class MyBrickusPiecePanel extends JPanel {
 				add(gridPanel);
 			}
 	}
-	public void addListeners(MyBrickusPieceSelectionChangeListener listener) {
+	public void addListener(MyBrickusPieceSelectionChangeListener listener) {
 		listeners.add(listener);
 	}
 	public void notifyAllListenersPieceSelectionChanged() {
@@ -84,6 +84,7 @@ public class MyBrickusPiecePanel extends JPanel {
 		public void mouseClicked(MouseEvent event) {
 			if (player == model.getActivePlayer()) {
 				selectionModel.setSelectedPiece(piece);
+				notifyAllListenersPieceSelectionChanged();
 			}
 		}
 	}

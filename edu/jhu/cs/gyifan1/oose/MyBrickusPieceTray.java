@@ -32,17 +32,30 @@ public class MyBrickusPieceTray extends JPanel {
 		int width = (int)(frameWidth * 0.4);
 		setPreferredSize(new Dimension(width, (int)(width * LAYOUT_ROWS / LAYOUT_COLS)));
 	}
-	private void draw() {
+	private void updateSelected() {
+		for (int i = 0; i < LAYOUT_ROWS * LAYOUT_COLS; i++) {
+			if (model.getActivePlayer() == player && selectionModel.getSelectedPiece() == piecePanels[i].getPiece()) {
+				piecePanels[i].setBackground(Color.gray);
+			} else {
+				piecePanels[i].setBackground(null);
+			}
+		}
+	}
+	private void redrawPieces() {
 		List<BrickusPiece> pieces = model.getPieces(player);
 		removeAll();
 		revalidate();
 		for (int i = 0; i < LAYOUT_ROWS * LAYOUT_COLS; i++) {
 			BrickusPiece piece = pieces.get(i);
 			piecePanels[i] = new MyBrickusPiecePanel(piece, player, model, selectionModel);
-			if (model.getActivePlayer() == player && selectionModel.getSelectedPiece() == piece) {
-				piecePanels[i].setBackground(Color.gray);
-			}
 			add(piecePanels[i]);
+			piecePanels[i].addListener(new MyBrickusPieceSelectionChangeListener() {
+				
+				@Override
+				public void pieceSelectionChanged(MyBrickusPieceSelectionModel selectionModel) {
+					MyBrickusPieceTray.this.repaint();
+				}
+			});
 		}
 	}
 	public MyBrickusPieceTray(MyBrickusFrame frame, Player player) {
@@ -55,11 +68,11 @@ public class MyBrickusPieceTray extends JPanel {
 		updateSize();
 		setBorder(BorderFactory.createCompoundBorder(new EmptyBorder(20, 20, 20, 20), new BevelBorder(BevelBorder.LOWERED)));
 		setLayout(new GridLayout(LAYOUT_ROWS, LAYOUT_COLS));
-		draw();
+		redrawPieces();
 	}
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		updateSize();
-		draw();
+		updateSelected();
 	}
 }
