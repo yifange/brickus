@@ -43,9 +43,7 @@ public class MyBrickusFrame extends javax.swing.JFrame {
 	}
 	private void addComponents() {
 		add(statusBar, BorderLayout.SOUTH);
-		JPanel boardPanelConstrain = new JPanel(new BorderLayout());
-		boardPanelConstrain.add(boardPanel, BorderLayout.NORTH);
-		add(boardPanelConstrain, BorderLayout.WEST);
+		add(boardPanel, BorderLayout.CENTER);
 		JPanel rightPanel = new JPanel(new BorderLayout());
 		JPanel pieceTrayHolderPanel = new JPanel(new BorderLayout());
 		pieceTrayHolderPanel.add(pieceTrays.get(Player.PLAYER1), BorderLayout.NORTH);

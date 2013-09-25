@@ -23,18 +23,22 @@ public class MyBrickusBoardPanel extends MyBrickusGrid {
 	private JFrame frame;
 //	private MyBrickusBoardGridPanel[] boardGridPanels;
 	private int height, width;
+	private int cursorX, cursorY;
 	private boolean mouseInBoard;
 	public void updateSize() {
 		int frameHeight = frame.getContentPane().getHeight();
 		int frameWidth = frame.getContentPane().getWidth();
 		int statusBarHeight = MyBrickusStatusBar.HEIGHT;
 		int height = frameHeight - statusBarHeight;
-		int width = (int)(frameWidth * 0.6);
+		int width = (int)((frameWidth - 10) * 0.6);
 		int side = height;
+		int border = 0;
 		if (width < height) {
 			side = width;
+			border = (height - width) / 2;
 		}
-		setPreferredSize(new Dimension(side, side));
+//		setPreferredSize(new Dimension(side, side));
+		setLocation(10, border);
 		setSize(side, side);
 		
 	}
@@ -47,6 +51,18 @@ public class MyBrickusBoardPanel extends MyBrickusGrid {
 					setFillColor(col, row, null);
 				}
 			}
+		if (mouseInBoard && selectionModel.getSelectedPiece() != null) {
+			BrickusPiece piece = selectionModel.getSelectedPiece();
+			System.out.println("height: " + piece.getHeight());
+			System.out.println("width: " + piece.getWidth());
+			for (int y = 0; y < piece.getHeight(); y++)
+				for (int x = 0; x < piece.getWidth(); x++) {
+					if (getFillColor(cursorX + x, cursorY + y) == null) {
+//					System.out.println(cursorX + x + " " + (cursorY + y));
+						setFillColor(cursorX + x, cursorY + y, MyBrickusUtils.getPlayerColor(model.getActivePlayer()));
+					}
+				}
+		}
 	}
 	public void createBoard() {
 		for (int row = 0; row < height; row++) 
@@ -63,7 +79,9 @@ public class MyBrickusBoardPanel extends MyBrickusGrid {
 		height = model.getHeight();
 		width = model.getWidth();
 		createBoard();
-		addMouseListener(new MouseHandler());
+		MouseHandler mouseHandler = new MouseHandler();
+		addMouseListener(mouseHandler);
+		addMouseMotionListener(mouseHandler);
 	}
 	public void paintComponent(Graphics g) {
 		paintBoard();
@@ -78,7 +96,7 @@ public class MyBrickusBoardPanel extends MyBrickusGrid {
 		public void mouseClicked(MouseEvent event) {
 			Point point = getGridLocation(event.getX(), event.getY());
 			BrickusPiece piece = selectionModel.getSelectedPiece();
-			if (piece != null) {
+			if (piece != null && point != null) {
 				model.placePiece(model.getActivePlayer(), point.x, point.y, piece);
 				System.out.println("placePiece");
 				repaint();
@@ -86,13 +104,20 @@ public class MyBrickusBoardPanel extends MyBrickusGrid {
 		}
 		public void mouseEntered(MouseEvent event) {
 			mouseInBoard = true;
-			System.out.println("in");
-			repaint();
 		}
+		
 		public void mouseExited(MouseEvent event) {
 			mouseInBoard = false;
-			System.out.println("out");
-			repaint();
+		}
+		public void mouseMoved(MouseEvent event) {
+			Point point = getGridLocation(event.getX(), event.getY());
+			if (point != null) {
+				cursorX = point.x;
+				
+				cursorY = point.y;
+				System.out.println("cursorX: " + cursorX + "cursorY:" + cursorY);
+				repaint();
+			}
 		}
 	}
 }

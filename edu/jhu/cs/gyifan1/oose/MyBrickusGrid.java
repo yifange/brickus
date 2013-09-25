@@ -20,8 +20,14 @@ public class MyBrickusGrid extends JPanel {
 		int gridWidth = getWidth() / layoutWidth;
 		int gridHeight = getHeight() / layoutHeight;
 		Point point = new Point();
-		point.setLocation((x - origin.x) / gridWidth, (y - origin.y) / gridHeight);
-		return point;
+		int gx = (x - origin.x) / gridWidth;
+		int gy = (y - origin.y) / gridHeight;
+		if (gx >= 0 && gx < layoutWidth && gy >= 0 && gy < layoutHeight) {
+			point.setLocation(gx, gy);
+			return point;
+		} else {
+			return null;
+		}
 	}
 	public MyBrickusGrid(int width, int height) {
 		this.layoutHeight = height;
@@ -39,18 +45,25 @@ public class MyBrickusGrid extends JPanel {
 		return fillColors[y * layoutWidth + x];
 	}
 	public void paintComponent(Graphics g) {
+//		super.paintComponents(g);
+//		revalidate();
 		Point point = getLocation();
 		int x = point.x;
 		int y = point.y;
+		System.out.println("x: " + x + "y: " + y);
 		int gridWidth = getWidth() / layoutWidth;
 		int gridHeight = getHeight() / layoutHeight;
 		for (int row = 0; row < layoutHeight; row++)
 			for (int col = 0; col < layoutWidth; col++) {
 				Color fillColor = fillColors[row * layoutWidth + col];
-				if (fillColor != null) {
+				if (fillColor != null)
 					g.setColor(fillColors[row * layoutWidth + col]);
-					g.fillRect(x + col * gridWidth, y + row * gridHeight, gridWidth, gridHeight);
-				}
+				else
+					g.setColor(Color.white);
+				g.fillRect(x + col * gridWidth, y + row * gridHeight, gridWidth, gridHeight);
+//				} else {
+//					
+//				}
 				g.setColor(borderColors[row * layoutWidth + col]);
 				g.drawRect(x + col * gridWidth, y + row * gridHeight, gridWidth, gridHeight);
 			}
