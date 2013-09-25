@@ -15,7 +15,7 @@ import javax.swing.border.BevelBorder;
 import edu.jhu.cs.oose.fall2013.brickus.iface.BrickusModel;
 import edu.jhu.cs.oose.fall2013.brickus.iface.BrickusPiece;
 
-public class MyBrickusBoardPanel extends JPanel {
+public class MyBrickusBoardPanel extends MyBrickusGrid {
 	private BrickusModel model;
 	private MyBrickusPieceSelectionModel selectionModel;
 	private JFrame frame;
@@ -81,9 +81,10 @@ public class MyBrickusBoardPanel extends JPanel {
 		
 	}
 	public MyBrickusBoardPanel(MyBrickusFrame frame) {
+		super(frame.getModel().getWidth(), frame.getModel().getHeight());
 		this.frame = frame;
-		this.model = frame.getModel();
-		this.selectionModel = frame.getSelectionModel();
+		model = frame.getModel();
+		selectionModel = frame.getSelectionModel();
 		height = model.getHeight();
 		width = model.getWidth();
 		GridLayout gridLayout = new GridLayout(height, width);
