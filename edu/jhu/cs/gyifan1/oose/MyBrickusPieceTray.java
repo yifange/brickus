@@ -30,7 +30,6 @@ public class MyBrickusPieceTray extends JPanel {
 	public void updateSize() {
 		int frameWidth = frame.getWidth();
 		int width = (int)(frameWidth * 0.4);
-		System.out.println("updateSize");
 		setPreferredSize(new Dimension(width, (int)(width * LAYOUT_ROWS / LAYOUT_COLS)));
 	}
 	private void draw() {
@@ -39,7 +38,7 @@ public class MyBrickusPieceTray extends JPanel {
 		revalidate();
 		for (int i = 0; i < LAYOUT_ROWS * LAYOUT_COLS; i++) {
 			BrickusPiece piece = pieces.get(i);
-			piecePanels[i] = new MyBrickusPiecePanel(piece, color, selectionModel);
+			piecePanels[i] = new MyBrickusPiecePanel(piece, player, model, selectionModel);
 			if (model.getActivePlayer() == player && selectionModel.getSelectedPiece() == piece) {
 				piecePanels[i].setBackground(Color.gray);
 			}
@@ -51,7 +50,7 @@ public class MyBrickusPieceTray extends JPanel {
 		this.model = frame.getModel();
 		this.selectionModel = frame.getSelectionModel();
 		this.player = player;
-		color = MyBrickusUtilities.getPlayerColor(player);
+		color = MyBrickusUtils.getPlayerColor(player);
 		piecePanels = new MyBrickusPiecePanel[LAYOUT_ROWS * LAYOUT_COLS];
 		updateSize();
 		setBorder(BorderFactory.createCompoundBorder(new EmptyBorder(20, 20, 20, 20), new BevelBorder(BevelBorder.LOWERED)));

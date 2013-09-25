@@ -5,22 +5,27 @@ import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 
+import edu.jhu.cs.oose.fall2013.brickus.iface.BrickusModel;
 import edu.jhu.cs.oose.fall2013.brickus.iface.BrickusPiece;
+import edu.jhu.cs.oose.fall2013.brickus.iface.Player;
 
 public class MyBrickusPiecePanel extends JPanel {
 	private BrickusPiece piece;
+	private Player player;
 	private Color color;
 	private JPanel[] pieceGridPanels; 
 	private int biasX, biasY;
 	private final static int LAYOUT_COLS = 5, LAYOUT_ROWS = 5;
 	private MyBrickusPieceSelectionModel selectionModel;
-	private List<MyBrickusPieceSelectionChangeListener> listeners;
+	private BrickusModel model;
+	private Set<MyBrickusPieceSelectionChangeListener> listeners;
 	public BrickusPiece getPiece() {
 		return piece;
 	}
@@ -42,15 +47,22 @@ public class MyBrickusPiecePanel extends JPanel {
 			}
 	}
 	public void addListeners(MyBrickusPieceSelectionChangeListener listener) {
-		
+		listeners.add(listener);
 	}
-	
-	public MyBrickusPiecePanel(BrickusPiece piece, Color color, MyBrickusPieceSelectionModel selectionModel) {
+	public void notifyAllListenersPieceSelectionChanged() {
+		for (MyBrickusPieceSelectionChangeListener listener : listeners) {
+			listener.pieceSelectionChanged();
+		}
+	}
+	public MyBrickusPiecePanel(BrickusPiece piece, Player player, BrickusModel model, MyBrickusPieceSelectionModel selectionModel) {
 		
 		this.piece = piece;
-		this.color = color;
+		this.player = player;
+		this.model = model;
+		this.color = MyBrickusUtils.getPlayerColor(player);
 		this.selectionModel = selectionModel;
 		
+		listeners = new HashSet<MyBrickusPieceSelectionChangeListener>();
 		biasX = (LAYOUT_COLS - piece.getWidth()) / 2;
 		biasY = (LAYOUT_ROWS - piece.getHeight()) / 2;
 		pieceGridPanels = new JPanel[LAYOUT_COLS * LAYOUT_ROWS];
@@ -70,8 +82,9 @@ public class MyBrickusPiecePanel extends JPanel {
 	
 	private class MouseHandler extends MouseAdapter {
 		public void mouseClicked(MouseEvent event) {
-			selectionModel.setSelectedPiece(piece);
-			//TODO: selectedPieceChanged
+			if (player == model.getActivePlayer()) {
+				selectionModel.setSelectedPiece(piece);
+			}
 		}
 	}
 }
