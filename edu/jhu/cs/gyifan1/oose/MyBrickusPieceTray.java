@@ -66,7 +66,7 @@ public class MyBrickusPieceTray extends JPanel {
 		color = MyBrickusUtils.getPlayerColor(player);
 		piecePanels = new MyBrickusPiecePanel[LAYOUT_ROWS * LAYOUT_COLS];
 		updateSize();
-		setBorder(BorderFactory.createCompoundBorder(new EmptyBorder(20, 20, 20, 20), new BevelBorder(BevelBorder.LOWERED)));
+//		setBorder(BorderFactory.createCompoundBorder(new EmptyBorder(20, 20, 20, 20), new BevelBorder(BevelBorder.LOWERED)));
 		setLayout(new GridLayout(LAYOUT_ROWS, LAYOUT_COLS));
 		frame.getModel().addBrickusListener(new BrickusListener() {
 			
@@ -75,7 +75,7 @@ public class MyBrickusPieceTray extends JPanel {
 				redrawPieces();
 				if (event.isPlayerChanged() || event.isGameOver())
 					selectionModel.clearSelection();
-				repaint();
+					repaint();
 			}
 			
 			@Override

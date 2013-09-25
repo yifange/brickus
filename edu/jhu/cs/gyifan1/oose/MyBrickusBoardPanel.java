@@ -11,6 +11,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 
@@ -24,7 +25,6 @@ public class MyBrickusBoardPanel extends MyBrickusGrid {
 //	private MyBrickusBoardGridPanel[] boardGridPanels;
 	private int height, width;
 	private int cursorX, cursorY;
-	private boolean mouseInBoard;
 	public void updateSize() {
 		int frameHeight = frame.getContentPane().getHeight();
 		int frameWidth = frame.getContentPane().getWidth();
@@ -42,27 +42,39 @@ public class MyBrickusBoardPanel extends MyBrickusGrid {
 		setSize(side, side);
 		
 	}
-	public void paintBoard() {
+	private void paintPlacedPieces() {
 		for (int row = 0; row < height; row++)
 			for (int col = 0; col < width; col++) {
 				if (model.getContents(col, row) != null) {
 					setFillColor(col, row, MyBrickusUtils.getPlayerColor(model.getContents(col, row)));
 				} else {
-					setFillColor(col, row, null);
+					setFillColor(col, row, Color.white);
 				}
 			}
-		if (mouseInBoard && selectionModel.getSelectedPiece() != null) {
+	}
+	private void paintHoveringPieces() {
+		if (selectionModel.getSelectedPiece() != null) {
 			BrickusPiece piece = selectionModel.getSelectedPiece();
 //			System.out.println("height: " + piece.getHeight());
 //			System.out.println("width: " + piece.getWidth());
 			for (int y = 0; y < piece.getHeight(); y++)
 				for (int x = 0; x < piece.getWidth(); x++) {
-					if (piece.isOccupied(x, y) && getFillColor(cursorX + x, cursorY + y) == null && (cursorX + x >= 0) && (cursorX + x < width) && (cursorY + y >= 0) && (cursorY + y <= height)) {
+					if (piece.isOccupied(x, y)) {
 //					System.out.println(cursorX + x + " " + (cursorY + y));
-						setFillColor(cursorX + x, cursorY + y, MyBrickusUtils.getPlayerTransparentColor(model.getActivePlayer()));
+						Color color;
+						Color currentColor = getFillColor(cursorX + x, cursorY + y);
+						if (currentColor != Color.white && currentColor != MyBrickusUtils.getPlayerColor(model.getActivePlayer()))
+							color = MyBrickusUtils.getOverlappingColor();
+						else
+							color = MyBrickusUtils.getPlayerTransparentColor(model.getActivePlayer());
+						setFillColor(cursorX + x, cursorY + y, color);
 					}
 				}
 		}
+	}
+	private void paintBoard() {
+		paintPlacedPieces();
+		paintHoveringPieces();
 	}
 	public void createBoard() {
 		for (int row = 0; row < height; row++) 
@@ -87,30 +99,25 @@ public class MyBrickusBoardPanel extends MyBrickusGrid {
 		updateSize();
 		super.paintComponent(g);
 	}
-	
-	
-	
-	
 	private class MouseHandler extends MouseAdapter {
 		public void mouseClicked(MouseEvent event) {
 			Point point = getGridLocation(event.getX(), event.getY());
 			BrickusPiece piece = selectionModel.getSelectedPiece();
-			if (piece != null && point != null) {
+			if (SwingUtilities.isLeftMouseButton(event) && piece != null && point != null) {
 				model.placePiece(model.getActivePlayer(), point.x, point.y, piece);
 				System.out.println("placePiece");
 				repaint();
 			}
-		}
-		public void mouseEntered(MouseEvent event) {
-			mouseInBoard = true;
+			event.getComponent().getParent().dispatchEvent(event);
+
 		}
 		
 		public void mouseExited(MouseEvent event) {
-			mouseInBoard = false;
+			paintPlacedPieces();
 		}
 		public void mouseMoved(MouseEvent event) {
 			Point point = getGridLocation(event.getX(), event.getY());
-			if (point != null) {
+			if (selectionModel.getSelectedPiece() != null && point != null) {
 				cursorX = point.x;
 				cursorY = point.y;
 //				System.out.println("cursorX: " + cursorX + "cursorY:" + cursorY);

@@ -16,11 +16,10 @@ import edu.jhu.cs.oose.fall2013.brickus.iface.BrickusModel;
 import edu.jhu.cs.oose.fall2013.brickus.iface.BrickusPiece;
 import edu.jhu.cs.oose.fall2013.brickus.iface.Player;
 
-public class MyBrickusPiecePanel extends JPanel {
+public class MyBrickusPiecePanel extends MyBrickusGrid {
 	private BrickusPiece piece;
 	private Player player;
 	private Color color;
-	private JPanel[] pieceGridPanels; 
 	private int biasX, biasY;
 	private final static int LAYOUT_COLS = 5, LAYOUT_ROWS = 5;
 	private MyBrickusPieceSelectionModel selectionModel;
@@ -30,20 +29,20 @@ public class MyBrickusPiecePanel extends JPanel {
 		return piece;
 	}
 	private void draw() {
-		removeAll();
-		revalidate();
+		boolean selected = (piece == selectionModel.getSelectedPiece());
 		for (int row = 0; row < LAYOUT_ROWS; row++)
 			for (int col = 0; col < LAYOUT_COLS; col++) {
-				JPanel gridPanel = pieceGridPanels[row * LAYOUT_COLS + col];
-				gridPanel.setBackground(color);
+				setBorderColor(col, row, Color.black);
+				setFillColor(col, row, MyBrickusUtils.getPlayerColor(player));
 				if (piece.isOccupied(col - biasX, row - biasY)) {
-					gridPanel.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
-					gridPanel.setOpaque(true);
+					setFillColor(col, row, MyBrickusUtils.getPlayerColor(player));
 				} else {
-					gridPanel.setBorder(BorderFactory.createEmptyBorder());
-					gridPanel.setOpaque(false);
+					if (selected)
+						setFillColor(col, row, Color.yellow);
+					else
+						setFillColor(col, row, Color.white);
+						
 				}
-				add(gridPanel);
 			}
 	}
 	public void removeListener(MyBrickusPieceSelectionChangeListener listener) {
@@ -58,7 +57,7 @@ public class MyBrickusPiecePanel extends JPanel {
 		}
 	}
 	public MyBrickusPiecePanel(BrickusPiece piece, Player player, BrickusModel model, MyBrickusPieceSelectionModel selectionModel) {
-		
+		super(LAYOUT_COLS, LAYOUT_ROWS);
 		this.piece = piece;
 		this.player = player;
 		this.model = model;
@@ -68,15 +67,8 @@ public class MyBrickusPiecePanel extends JPanel {
 		listeners = new HashSet<MyBrickusPieceSelectionChangeListener>();
 		biasX = (LAYOUT_COLS - piece.getWidth()) / 2;
 		biasY = (LAYOUT_ROWS - piece.getHeight()) / 2;
-		pieceGridPanels = new JPanel[LAYOUT_COLS * LAYOUT_ROWS];
-		setLayout(new GridLayout(LAYOUT_ROWS, LAYOUT_COLS));
+//		setLayout(new GridLayout(LAYOUT_ROWS, LAYOUT_COLS));
 		addMouseListener(new MouseHandler());
-		for (int row = 0; row < LAYOUT_ROWS; row++)
-			for (int col = 0; col < LAYOUT_COLS; col++) {
-				JPanel gridPanel = new JPanel();
-				pieceGridPanels[row * LAYOUT_COLS + col] = gridPanel;
-			}
-		draw();	
 	}
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);

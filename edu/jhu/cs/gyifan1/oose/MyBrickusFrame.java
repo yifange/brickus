@@ -4,6 +4,9 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,10 +16,12 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.border.BevelBorder;
 
 
 import edu.jhu.cs.oose.fall2013.brickus.iface.BrickusModel;
+import edu.jhu.cs.oose.fall2013.brickus.iface.BrickusPiece;
 import edu.jhu.cs.oose.fall2013.brickus.iface.Player;
 import edu.jhu.cs.oose.fall2013.brickus.model.StandardBrickusModel;
 
@@ -40,7 +45,7 @@ public class MyBrickusFrame extends javax.swing.JFrame {
 	}
 	private void addComponents() {
 		add(statusBar, BorderLayout.SOUTH);
-		add(boardPanel, BorderLayout.CENTER);
+		add(boardPanel, BorderLayout.WEST);
 		JPanel rightPanel = new JPanel(new BorderLayout());
 		JPanel pieceTrayHolderPanel = new JPanel(new BorderLayout());
 		pieceTrayHolderPanel.add(pieceTrays.get(Player.PLAYER1), BorderLayout.NORTH);
@@ -62,6 +67,29 @@ public class MyBrickusFrame extends javax.swing.JFrame {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		addComponents();
 		pack();
+		MouseHandler mouseHandler = new MouseHandler();
+		getContentPane().addMouseListener(mouseHandler);
+		getContentPane().addMouseWheelListener(mouseHandler);
 		updateComponentSize();
+	}
+	private class MouseHandler extends MouseAdapter {
+		public void mouseClicked(MouseEvent event) {
+			BrickusPiece piece = selectionModel.getSelectedPiece();
+			if (piece != null && SwingUtilities.isRightMouseButton(event))
+				 if (event.isShiftDown()) {
+					 piece.flipHorizontally();
+				 } else {
+					 piece.flipVertically();
+				 }
+		}
+		public void mouseWheelMoved(MouseWheelEvent event) {
+			BrickusPiece piece = selectionModel.getSelectedPiece();
+			if (piece != null) {
+				if (event.getUnitsToScroll() > 1)
+					piece.rotateClockwise();
+				else if (event.getUnitsToScroll() < -1)
+					piece.rotateCounterClockwise();
+			}
+		}
 	}
 }

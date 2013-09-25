@@ -52,14 +52,19 @@ public class MyBrickusGrid extends JPanel {
 		}
 	}
 	public void paintComponent(Graphics g) {
-//		super.paintComponents(g);
-//		revalidate();
 		Point point = getLocation();
 		int x = point.x;
 		int y = point.y;
+		x = 0; 
+		y = 0;
 //		System.out.println("x: " + x + "y: " + y);
+		
 		int gridWidth = getWidth() / layoutWidth;
 		int gridHeight = getHeight() / layoutHeight;
+//		System.out.println("GridWidth: " + gridWidth);
+//		System.out.println("GridHeight: " + gridHeight);
+		g.setColor(Color.white);
+		g.fillRect(x, y, getWidth(), getHeight());
 		for (int row = 0; row < layoutHeight; row++)
 			for (int col = 0; col < layoutWidth; col++) {
 				Color fillColor = fillColors[row * layoutWidth + col];
@@ -68,9 +73,6 @@ public class MyBrickusGrid extends JPanel {
 				else
 					g.setColor(Color.white);
 				g.fillRect(x + col * gridWidth, y + row * gridHeight, gridWidth, gridHeight);
-//				} else {
-//					
-//				}
 				g.setColor(borderColors[row * layoutWidth + col]);
 				g.drawRect(x + col * gridWidth, y + row * gridHeight, gridWidth, gridHeight);
 			}
