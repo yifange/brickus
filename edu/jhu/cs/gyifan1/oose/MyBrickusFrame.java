@@ -43,8 +43,8 @@ public class MyBrickusFrame extends javax.swing.JFrame {
 	}
 	private void addComponents() {
 		add(statusBar, BorderLayout.SOUTH);
-		JPanel boardPanelConstrain = new JPanel(new GridLayout(1, 1));
-		boardPanelConstrain.add(boardPanel);
+		JPanel boardPanelConstrain = new JPanel(new BorderLayout());
+		boardPanelConstrain.add(boardPanel, BorderLayout.NORTH);
 		add(boardPanelConstrain, BorderLayout.WEST);
 		JPanel rightPanel = new JPanel(new BorderLayout());
 		JPanel pieceTrayHolderPanel = new JPanel(new BorderLayout());
@@ -65,7 +65,8 @@ public class MyBrickusFrame extends javax.swing.JFrame {
 		pieceTrays.put(Player.PLAYER2, new MyBrickusPieceTray(this, Player.PLAYER2));
 		setMinimumSize(new Dimension(MIN_WIDTH, MIN_HEIGHT));
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		updateComponentSize();
 		addComponents();
+		pack();
+		updateComponentSize();
 	}
 }
