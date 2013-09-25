@@ -51,7 +51,7 @@ public class MyBrickusPiecePanel extends JPanel {
 	}
 	public void notifyAllListenersPieceSelectionChanged() {
 		for (MyBrickusPieceSelectionChangeListener listener : listeners) {
-			listener.pieceSelectionChanged();
+			listener.pieceSelectionChanged(selectionModel);
 		}
 	}
 	public MyBrickusPiecePanel(BrickusPiece piece, Player player, BrickusModel model, MyBrickusPieceSelectionModel selectionModel) {
