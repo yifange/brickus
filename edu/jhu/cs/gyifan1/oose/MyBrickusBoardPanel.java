@@ -58,8 +58,8 @@ public class MyBrickusBoardPanel extends JPanel {
 				grid.addListener(new MyBrickusMouseLocationListener() {
 					@Override
 					public void mouseEnteredLocation(int x, int y) {
+//						System.out.println(mouseInBoard);
 						if (mouseInBoard) {
-							System.out.println("hello");
 							
 							BrickusPiece piece = selectionModel.selectedPiece;
 							for (int i = 0; i < piece.getHeight(); y++)
@@ -102,12 +102,20 @@ public class MyBrickusBoardPanel extends JPanel {
 	
 	
 	private class MouseHandler extends MouseAdapter {
+		public void mouseClicked(MouseEvent event) {
+			System.out.println("clicked");
+		}
+		public void mouseMoved(MouseEvent event) {
+			System.out.println("moving");
+		}
 		public void mouseEntered(MouseEvent event) {
 			mouseInBoard = true;
+			System.out.println("in");
 			repaint();
 		}
 		public void mouseExited(MouseEvent event) {
 			mouseInBoard = false;
+			System.out.println("out");
 			repaint();
 		}
 	}
