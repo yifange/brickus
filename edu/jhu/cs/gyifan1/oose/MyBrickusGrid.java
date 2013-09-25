@@ -36,13 +36,20 @@ public class MyBrickusGrid extends JPanel {
 		borderColors = new Color[layoutHeight * layoutWidth];
 	}
 	public void setFillColor(int x, int y, Color color) {
-		fillColors[y * layoutWidth + x] = color;
+		if (x >= 0 && x < layoutWidth && y >= 0 && y < layoutHeight)
+			fillColors[y * layoutWidth + x] = color;
 	}
-	public void setBorderColor(int x, int y, Color color) {
-		borderColors[y * layoutWidth + x] = color;
+	public void setBorderColor(int x, int y, Color color) throws IndexOutOfBoundsException {
+		if (x >= 0 && x < layoutWidth && y >= 0 && y < layoutHeight)
+			borderColors[y * layoutWidth + x] = color;
 	}
 	public Color getFillColor(int x, int y) {
-		return fillColors[y * layoutWidth + x];
+		try {
+			Color color = fillColors[y * layoutWidth + x];
+			return color;
+		} catch (IndexOutOfBoundsException e) {
+			return null;
+		}
 	}
 	public void paintComponent(Graphics g) {
 //		super.paintComponents(g);
@@ -50,7 +57,7 @@ public class MyBrickusGrid extends JPanel {
 		Point point = getLocation();
 		int x = point.x;
 		int y = point.y;
-		System.out.println("x: " + x + "y: " + y);
+//		System.out.println("x: " + x + "y: " + y);
 		int gridWidth = getWidth() / layoutWidth;
 		int gridHeight = getHeight() / layoutHeight;
 		for (int row = 0; row < layoutHeight; row++)

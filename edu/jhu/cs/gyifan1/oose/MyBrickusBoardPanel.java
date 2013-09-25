@@ -53,13 +53,13 @@ public class MyBrickusBoardPanel extends MyBrickusGrid {
 			}
 		if (mouseInBoard && selectionModel.getSelectedPiece() != null) {
 			BrickusPiece piece = selectionModel.getSelectedPiece();
-			System.out.println("height: " + piece.getHeight());
-			System.out.println("width: " + piece.getWidth());
+//			System.out.println("height: " + piece.getHeight());
+//			System.out.println("width: " + piece.getWidth());
 			for (int y = 0; y < piece.getHeight(); y++)
 				for (int x = 0; x < piece.getWidth(); x++) {
-					if (getFillColor(cursorX + x, cursorY + y) == null) {
+					if (piece.isOccupied(x, y) && getFillColor(cursorX + x, cursorY + y) == null && (cursorX + x >= 0) && (cursorX + x < width) && (cursorY + y >= 0) && (cursorY + y <= height)) {
 //					System.out.println(cursorX + x + " " + (cursorY + y));
-						setFillColor(cursorX + x, cursorY + y, MyBrickusUtils.getPlayerColor(model.getActivePlayer()));
+						setFillColor(cursorX + x, cursorY + y, MyBrickusUtils.getPlayerTransparentColor(model.getActivePlayer()));
 					}
 				}
 		}
@@ -72,7 +72,6 @@ public class MyBrickusBoardPanel extends MyBrickusGrid {
 	}
 	public MyBrickusBoardPanel(MyBrickusFrame frame) {
 		super(frame.getModel().getWidth(), frame.getModel().getHeight());
-//		setPadding(20, 20, 20, 20);
 		this.frame = frame;
 		model = frame.getModel();
 		selectionModel = frame.getSelectionModel();
@@ -113,9 +112,8 @@ public class MyBrickusBoardPanel extends MyBrickusGrid {
 			Point point = getGridLocation(event.getX(), event.getY());
 			if (point != null) {
 				cursorX = point.x;
-				
 				cursorY = point.y;
-				System.out.println("cursorX: " + cursorX + "cursorY:" + cursorY);
+//				System.out.println("cursorX: " + cursorX + "cursorY:" + cursorY);
 				repaint();
 			}
 		}

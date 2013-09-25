@@ -13,7 +13,7 @@ public class MyBrickusUtils {
 	}
 	public static Color getPlayerTransparentColor(Player player) {
 		if (player == Player.PLAYER1)
-			return new Color(1, 1, 1, (float)0.5);
+			return new Color(1, 0, 0, (float)0.5);
 		else
 			return new Color(0, 0, 1, (float)0.5);
 	}

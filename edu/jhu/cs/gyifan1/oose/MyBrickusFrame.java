@@ -28,9 +28,6 @@ public class MyBrickusFrame extends javax.swing.JFrame {
 	private Map<Player, MyBrickusPieceTray> pieceTrays;
 	public final static int DEFAULT_WIDTH = 780, DEFAULT_HEIGHT = 500, MIN_WIDTH = 780, MIN_HEIGHT = 500;
 
-	private void updateMessage(String message) {
-		statusBar.updateMessage(message);
-	}
 	private void updateComponentSize() {
 		boardPanel.updateSize();
 		statusBar.updateSize();
