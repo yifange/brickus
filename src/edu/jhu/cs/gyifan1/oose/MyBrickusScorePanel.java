@@ -1,6 +1,5 @@
 package edu.jhu.cs.gyifan1.oose;
 
-import java.awt.Color;
 import java.awt.Font;
 import java.util.HashMap;
 import java.util.Map;
@@ -8,7 +7,6 @@ import java.util.Map;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
@@ -19,29 +17,9 @@ import edu.jhu.cs.oose.fall2013.brickus.iface.BrickusModel;
 import edu.jhu.cs.oose.fall2013.brickus.iface.Player;
 
 public class MyBrickusScorePanel extends JPanel {
-	private Map<Player, JLabel> scoreLabels;
 	private BrickusModel model;
-	private void updateScores() {
-		for (Player player : scoreLabels.keySet()) {
-			scoreLabels.get(player).setText(String.valueOf(model.calculateScore(player)));
-		}
-	}
-	private void highlightPlayer(Player p) {
-		if (p == null) {
-			for (Player player : scoreLabels.keySet()) {
-				JLabel label = scoreLabels.get(player);
-				label.setBorder(BorderFactory.createCompoundBorder(new LineBorder(MyBrickusUtils.getPlayerColor(player)), new EmptyBorder(10, 10, 10, 10)));
-			}
-		} else {
-			for (Player player : scoreLabels.keySet()) {
-				JLabel label = scoreLabels.get(player);
-				if (p == player) 
-					label.setBorder(BorderFactory.createCompoundBorder(new LineBorder(MyBrickusUtils.getPlayerColor(player)), new EmptyBorder(10, 10, 10, 10)));
-				else
-					label.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-			}
-		}
-	}
+	private Map<Player, JLabel> scoreLabels;
+
 	public MyBrickusScorePanel(final BrickusModel model) {
 		this.model = model;
 		scoreLabels = new HashMap<Player, JLabel>();
@@ -55,9 +33,14 @@ public class MyBrickusScorePanel extends JPanel {
 		add(scoreLabels.get(Player.PLAYER1));
 		add(scoreLabels.get(Player.PLAYER2));
 		highlightPlayer(model.getActivePlayer());
-		
+
 		model.addBrickusListener(new BrickusListener() {
-			
+
+			@Override
+			public void illegalMove(BrickusIllegalMoveEvent event) {
+				// nothing to do
+			}
+
 			@Override
 			public void modelChanged(BrickusEvent event) {
 				if (event.isPlayerChanged()) {
@@ -71,11 +54,34 @@ public class MyBrickusScorePanel extends JPanel {
 					highlightPlayer(player);
 				}
 			}
-			
-			@Override
-			public void illegalMove(BrickusIllegalMoveEvent event) {
-				// nothing to do
-			}
 		});
+	}
+
+	private void highlightPlayer(Player p) {
+		if (p == null) {
+			for (Player player : scoreLabels.keySet()) {
+				JLabel label = scoreLabels.get(player);
+				label.setBorder(BorderFactory.createCompoundBorder(new LineBorder(
+						MyBrickusUtils.getPlayerColor(player)), new EmptyBorder(10, 10, 10,
+						10)));
+			}
+		} else {
+			for (Player player : scoreLabels.keySet()) {
+				JLabel label = scoreLabels.get(player);
+				if (p == player)
+					label.setBorder(BorderFactory.createCompoundBorder(new LineBorder(
+							MyBrickusUtils.getPlayerColor(player)), new EmptyBorder(10, 10,
+							10, 10)));
+				else
+					label.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+			}
+		}
+	}
+
+	private void updateScores() {
+		for (Player player : scoreLabels.keySet()) {
+			scoreLabels.get(player).setText(
+					String.valueOf(model.calculateScore(player)));
+		}
 	}
 }

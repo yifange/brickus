@@ -7,9 +7,25 @@ import java.awt.Point;
 import javax.swing.JPanel;
 
 public class MyBrickusGrid extends JPanel {
-	private int layoutHeight, layoutWidth;
-	private Color[] fillColors;
 	private Color[] borderColors;
+	private Color[] fillColors;
+	private int layoutHeight, layoutWidth;
+
+	public MyBrickusGrid(int width, int height) {
+		this.layoutHeight = height;
+		this.layoutWidth = width;
+		fillColors = new Color[layoutHeight * layoutWidth];
+		borderColors = new Color[layoutHeight * layoutWidth];
+	}
+
+	public Color getFillColor(int x, int y) {
+		try {
+			Color color = fillColors[y * layoutWidth + x];
+			return color;
+		} catch (IndexOutOfBoundsException e) {
+			return null;
+		}
+	}
 
 	public Point getGridLocation(int x, int y) {
 		Point origin = getLocation();
@@ -26,33 +42,7 @@ public class MyBrickusGrid extends JPanel {
 		}
 	}
 
-	public MyBrickusGrid(int width, int height) {
-		this.layoutHeight = height;
-		this.layoutWidth = width;
-		fillColors = new Color[layoutHeight * layoutWidth];
-		borderColors = new Color[layoutHeight * layoutWidth];
-	}
-
-	public void setFillColor(int x, int y, Color color) {
-		if (x >= 0 && x < layoutWidth && y >= 0 && y < layoutHeight)
-			fillColors[y * layoutWidth + x] = color;
-	}
-
-	public void setBorderColor(int x, int y, Color color)
-			throws IndexOutOfBoundsException {
-		if (x >= 0 && x < layoutWidth && y >= 0 && y < layoutHeight)
-			borderColors[y * layoutWidth + x] = color;
-	}
-
-	public Color getFillColor(int x, int y) {
-		try {
-			Color color = fillColors[y * layoutWidth + x];
-			return color;
-		} catch (IndexOutOfBoundsException e) {
-			return null;
-		}
-	}
-
+	@Override
 	public void paintComponent(Graphics g) {
 		Point point = getLocation();
 		int x = point.x;
@@ -80,5 +70,16 @@ public class MyBrickusGrid extends JPanel {
 				g.drawRect(x + col * gridWidth, y + row * gridHeight, gridWidth,
 						gridHeight);
 			}
+	}
+
+	public void setBorderColor(int x, int y, Color color)
+			throws IndexOutOfBoundsException {
+		if (x >= 0 && x < layoutWidth && y >= 0 && y < layoutHeight)
+			borderColors[y * layoutWidth + x] = color;
+	}
+
+	public void setFillColor(int x, int y, Color color) {
+		if (x >= 0 && x < layoutWidth && y >= 0 && y < layoutHeight)
+			fillColors[y * layoutWidth + x] = color;
 	}
 }

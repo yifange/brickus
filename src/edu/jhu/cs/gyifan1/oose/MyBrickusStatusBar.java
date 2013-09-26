@@ -15,13 +15,9 @@ import edu.jhu.cs.oose.fall2013.brickus.iface.BrickusModel;
 import edu.jhu.cs.oose.fall2013.brickus.iface.Player;
 
 public class MyBrickusStatusBar extends JPanel {
-	private JLabel messageLabel;
-	private MyBrickusFrame frame;
 	public final static int HEIGHT = 20;
-
-	public void updateSize() {
-		setPreferredSize(new Dimension(frame.getWidth(), HEIGHT));
-	}
+	private MyBrickusFrame frame;
+	private JLabel messageLabel;
 
 	public MyBrickusStatusBar(final MyBrickusFrame frame) {
 		this.frame = frame;
@@ -32,6 +28,12 @@ public class MyBrickusStatusBar extends JPanel {
 		messageLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		add(messageLabel);
 		frame.getModel().addBrickusListener(new BrickusListener() {
+
+			@Override
+			public void illegalMove(BrickusIllegalMoveEvent event) {
+				updateMessage(event.getMessage());
+				repaint();
+			}
 
 			@Override
 			public void modelChanged(BrickusEvent event) {
@@ -51,16 +53,14 @@ public class MyBrickusStatusBar extends JPanel {
 					repaint();
 				}
 			}
-
-			@Override
-			public void illegalMove(BrickusIllegalMoveEvent event) {
-				updateMessage(event.getMessage());
-				repaint();
-			}
 		});
 	}
 
 	private void updateMessage(String text) {
 		messageLabel.setText(text);
+	}
+
+	public void updateSize() {
+		setPreferredSize(new Dimension(frame.getWidth(), HEIGHT));
 	}
 }

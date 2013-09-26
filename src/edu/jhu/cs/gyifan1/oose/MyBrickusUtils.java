@@ -6,6 +6,10 @@ import edu.jhu.cs.oose.fall2013.brickus.iface.BrickusModel;
 import edu.jhu.cs.oose.fall2013.brickus.iface.Player;
 
 public class MyBrickusUtils {
+	public static Color getOverlappingColor() {
+		return new Color(1, 0, 1, (float) 0.6);
+	}
+
 	public static Color getPlayerColor(Player player) {
 		if (player == Player.PLAYER1)
 			return Color.red;
@@ -20,13 +24,10 @@ public class MyBrickusUtils {
 			return new Color(0, 0, 1, (float) 0.3);
 	}
 
-	public static Color getOverlappingColor() {
-		return new Color(1, 0, 1, (float) 0.6);
-	}
 	public static Player getWinner(BrickusModel model) {
 		int score1 = model.calculateScore(Player.PLAYER1);
 		int score2 = model.calculateScore(Player.PLAYER2);
-		if (score1 > score2) 
+		if (score1 > score2)
 			return Player.PLAYER1;
 		else if (score2 > score1)
 			return Player.PLAYER2;

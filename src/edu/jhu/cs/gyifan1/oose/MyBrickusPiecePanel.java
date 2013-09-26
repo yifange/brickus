@@ -12,17 +12,43 @@ import edu.jhu.cs.oose.fall2013.brickus.iface.BrickusPiece;
 import edu.jhu.cs.oose.fall2013.brickus.iface.Player;
 
 public class MyBrickusPiecePanel extends MyBrickusGrid {
+	private class MouseHandler extends MouseAdapter {
+		@Override
+		public void mouseClicked(MouseEvent event) {
+			if (player == model.getActivePlayer()) {
+				selectionModel.setSelectedPiece(piece);
+				notifyPieceSelectionChanged();
+			}
+		}
+	}
+	private final static int LAYOUT_COLS = 5, LAYOUT_ROWS = 5;
+	private int biasX, biasY;
+	private Color color;
+	private Set<MyBrickusPieceSelectionChangeListener> listeners;
+	private BrickusModel model;
 	private BrickusPiece piece;
 	private Player player;
-	private Color color;
-	private int biasX, biasY;
-	private final static int LAYOUT_COLS = 5, LAYOUT_ROWS = 5;
-	private MyBrickusPieceSelectionModel selectionModel;
-	private BrickusModel model;
-	private Set<MyBrickusPieceSelectionChangeListener> listeners;
 
-	public BrickusPiece getPiece() {
-		return piece;
+	private MyBrickusPieceSelectionModel selectionModel;
+
+	public MyBrickusPiecePanel(BrickusPiece piece, Player player,
+			BrickusModel model, MyBrickusPieceSelectionModel selectionModel) {
+		super(LAYOUT_COLS, LAYOUT_ROWS);
+		this.piece = piece;
+		this.player = player;
+		this.model = model;
+		this.color = MyBrickusUtils.getPlayerColor(player);
+		this.selectionModel = selectionModel;
+
+		listeners = new HashSet<MyBrickusPieceSelectionChangeListener>();
+		biasX = (LAYOUT_COLS - piece.getWidth()) / 2;
+		biasY = (LAYOUT_ROWS - piece.getHeight()) / 2;
+		// setLayout(new GridLayout(LAYOUT_ROWS, LAYOUT_COLS));
+		addMouseListener(new MouseHandler());
+	}
+
+	public void addListener(MyBrickusPieceSelectionChangeListener listener) {
+		listeners.add(listener);
 	}
 
 	private void draw() {
@@ -43,12 +69,8 @@ public class MyBrickusPiecePanel extends MyBrickusGrid {
 			}
 	}
 
-	public void removeListener(MyBrickusPieceSelectionChangeListener listener) {
-		listeners.remove(listener);
-	}
-
-	public void addListener(MyBrickusPieceSelectionChangeListener listener) {
-		listeners.add(listener);
+	public BrickusPiece getPiece() {
+		return piece;
 	}
 
 	public void notifyPieceSelectionChanged() {
@@ -57,33 +79,13 @@ public class MyBrickusPiecePanel extends MyBrickusGrid {
 		}
 	}
 
-	public MyBrickusPiecePanel(BrickusPiece piece, Player player,
-			BrickusModel model, MyBrickusPieceSelectionModel selectionModel) {
-		super(LAYOUT_COLS, LAYOUT_ROWS);
-		this.piece = piece;
-		this.player = player;
-		this.model = model;
-		this.color = MyBrickusUtils.getPlayerColor(player);
-		this.selectionModel = selectionModel;
-
-		listeners = new HashSet<MyBrickusPieceSelectionChangeListener>();
-		biasX = (LAYOUT_COLS - piece.getWidth()) / 2;
-		biasY = (LAYOUT_ROWS - piece.getHeight()) / 2;
-		// setLayout(new GridLayout(LAYOUT_ROWS, LAYOUT_COLS));
-		addMouseListener(new MouseHandler());
-	}
-
+	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		draw();
 	}
 
-	private class MouseHandler extends MouseAdapter {
-		public void mouseClicked(MouseEvent event) {
-			if (player == model.getActivePlayer()) {
-				selectionModel.setSelectedPiece(piece);
-				notifyPieceSelectionChanged();
-			}
-		}
+	public void removeListener(MyBrickusPieceSelectionChangeListener listener) {
+		listeners.remove(listener);
 	}
 }

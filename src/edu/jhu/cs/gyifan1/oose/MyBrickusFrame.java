@@ -25,30 +25,69 @@ import edu.jhu.cs.oose.fall2013.brickus.iface.BrickusModel;
 import edu.jhu.cs.oose.fall2013.brickus.iface.BrickusPiece;
 import edu.jhu.cs.oose.fall2013.brickus.iface.Player;
 import edu.jhu.cs.oose.fall2013.brickus.model.StandardBrickusModel;
-
+/**
+ * 
+ * @author yifan
+ * The main frame.
+ */
 public class MyBrickusFrame extends javax.swing.JFrame {
-	private BrickusModel model;
-	private MyBrickusPieceSelectionModel selectionModel;
-	private MyBrickusStatusBar statusBar;
-	private MyBrickusBoardPanel boardPanel;
-	private Map<Player, MyBrickusPieceTray> pieceTrays;
-	private JButton passButton;
+	/**
+	 * Handle mouse events triggered within the frame.
+	 * 
+	 * @author yifan
+	 *
+	 */
+	private class MouseHandler extends MouseAdapter {
+		@Override
+		public void mouseClicked(MouseEvent event) {
+
+			BrickusPiece piece = selectionModel.getSelectedPiece();
+			// right click?
+			if (piece != null && SwingUtilities.isRightMouseButton(event))
+				// holding shift?
+				if (event.isShiftDown()) {
+					piece.flipHorizontally();
+				} else {
+					piece.flipVertically();
+				}
+		}
+
+		@Override
+		public void mouseWheelMoved(MouseWheelEvent event) {
+			BrickusPiece piece = selectionModel.getSelectedPiece();
+			if (piece != null) {
+				// moving wheel? set to 1/-1 to decrease the sensibility
+				if (event.getUnitsToScroll() > 1)
+					piece.rotateClockwise();
+				else if (event.getUnitsToScroll() < -1)
+					piece.rotateCounterClockwise();
+			}
+		}
+	}
 	public final static int DEFAULT_WIDTH = 860, DEFAULT_HEIGHT = 500,
 			MIN_WIDTH = 860, MIN_HEIGHT = 500;
+	private MyBrickusBoardPanel boardPanel;
+	private BrickusModel model;
+	private JButton passButton;
+	private Map<Player, MyBrickusPieceTray> pieceTrays;
+	private MyBrickusPieceSelectionModel selectionModel;
 
-	private void updateComponentSize() {
-		boardPanel.updateSize();
-		statusBar.updateSize();
+	private MyBrickusStatusBar statusBar;
+	
+	/**
+	 * Initialize the frame.
+	 */
+	public MyBrickusFrame() {
+		super("Brickus");
+		setMinimumSize(new Dimension(MIN_WIDTH, MIN_HEIGHT));
+		setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		addMenu();
+		newGame();
 	}
-
-	public BrickusModel getModel() {
-		return model;
-	}
-
-	public MyBrickusPieceSelectionModel getSelectionModel() {
-		return selectionModel;
-	}
-
+	/**
+	 * Add components to the frame.
+	 */
 	private void addComponents() {
 		add(statusBar, BorderLayout.SOUTH);
 		add(boardPanel, BorderLayout.WEST);
@@ -70,30 +109,67 @@ public class MyBrickusFrame extends javax.swing.JFrame {
 		});
 		add(rightPanel, BorderLayout.EAST);
 	}
+
+	/**
+	 * Add menu to the frame.
+	 */
 	private void addMenu() {
 		JMenuBar menuBar = new JMenuBar();
 		JMenu menu = new JMenu("Game");
 		JMenuItem newGameMenuItem = new JMenuItem("New game");
+		JMenuItem passMenuItem = new JMenuItem("Pass");
 		JMenuItem exitMenuItem = new JMenuItem("Exit");
-	  exitMenuItem.addActionListener(new ActionListener() {
-			
+		// exit
+		exitMenuItem.addActionListener(new ActionListener() {
+
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				System.exit(0);
 			}
 		});
-	  newGameMenuItem.addActionListener(new ActionListener() {
+		// pass
+		passMenuItem.addActionListener(new ActionListener() {
 			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				model.pass(model.getActivePlayer());
+			}
+		});
+		
+		// new game
+		newGameMenuItem.addActionListener(new ActionListener() {
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				newGame();
 			}
 		});
 		menu.add(newGameMenuItem);
+		menu.add(passMenuItem);
 		menu.add(exitMenuItem);
 		menuBar.add(menu);
 		setJMenuBar(menuBar);
 	}
+	
+	/**
+	 * 
+	 * @return	the current {@link BrickusModel}.
+	 */
+	public BrickusModel getModel() {
+		return model;
+	}
+
+	/**
+	 * 
+	 * @return the current {@link MyBrickusPieceSelectionModel}
+	 */
+	public MyBrickusPieceSelectionModel getSelectionModel() {
+		return selectionModel;
+	}
+	
+	/**
+	 * Reset all the game settings and re-add components to the frame.
+	 */
 	private void newGame() {
 		getContentPane().removeAll();
 		getContentPane().revalidate();
@@ -113,51 +189,19 @@ public class MyBrickusFrame extends javax.swing.JFrame {
 		MouseHandler mouseHandler = new MouseHandler();
 		getContentPane().addMouseListener(mouseHandler);
 		getContentPane().addMouseWheelListener(mouseHandler);
-		updateComponentSize();
 		model.addBrickusListener(new BrickusListener() {
-			
+
+			@Override
+			public void illegalMove(BrickusIllegalMoveEvent event) {
+
+			}
+
 			@Override
 			public void modelChanged(BrickusEvent event) {
 				if (event.isGameOver())
 					passButton.setEnabled(false);
 			}
-			
-			@Override
-			public void illegalMove(BrickusIllegalMoveEvent event) {
-				
-			}
 		});
-		
-	}
-	public MyBrickusFrame() {
-		super("Brickus");
-		setMinimumSize(new Dimension(MIN_WIDTH, MIN_HEIGHT));
-		setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		addMenu();
-		newGame();
-	}
 
-	private class MouseHandler extends MouseAdapter {
-		public void mouseClicked(MouseEvent event) {
-			
-			BrickusPiece piece = selectionModel.getSelectedPiece();
-			if (piece != null && SwingUtilities.isRightMouseButton(event))
-				if (event.isShiftDown()) {
-					piece.flipHorizontally();
-				} else {
-					piece.flipVertically();
-				}
-		}
-
-		public void mouseWheelMoved(MouseWheelEvent event) {
-			BrickusPiece piece = selectionModel.getSelectedPiece();
-			if (piece != null) {
-				if (event.getUnitsToScroll() > 1)
-					piece.rotateClockwise();
-				else if (event.getUnitsToScroll() < -1)
-					piece.rotateCounterClockwise();
-			}
-		}
 	}
 }
