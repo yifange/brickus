@@ -16,10 +16,19 @@ import edu.jhu.cs.oose.fall2013.brickus.iface.BrickusListener;
 import edu.jhu.cs.oose.fall2013.brickus.iface.BrickusModel;
 import edu.jhu.cs.oose.fall2013.brickus.iface.Player;
 
+/**
+ * The panel holds the scores.
+ * @author yifan
+ *
+ */
 public class MyBrickusScorePanel extends JPanel {
 	private BrickusModel model;
 	private Map<Player, JLabel> scoreLabels;
-
+	
+	/**
+	 * Initialize the score panel.
+	 * @param model	The {@link BrickusModel}
+	 */
 	public MyBrickusScorePanel(final BrickusModel model) {
 		this.model = model;
 		scoreLabels = new HashMap<Player, JLabel>();
@@ -56,7 +65,11 @@ public class MyBrickusScorePanel extends JPanel {
 			}
 		});
 	}
-
+	
+	/**
+	 * Highlight one certain player's score on the panel.
+	 * @param p 	The player to be highlighted.
+	 */
 	private void highlightPlayer(Player p) {
 		if (p == null) {
 			for (Player player : scoreLabels.keySet()) {
@@ -77,7 +90,10 @@ public class MyBrickusScorePanel extends JPanel {
 			}
 		}
 	}
-
+	
+	/**
+	 * Update the scores according to the model.
+	 */
 	private void updateScores() {
 		for (Player player : scoreLabels.keySet()) {
 			scoreLabels.get(player).setText(

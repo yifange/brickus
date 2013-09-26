@@ -14,11 +14,20 @@ import edu.jhu.cs.oose.fall2013.brickus.iface.BrickusListener;
 import edu.jhu.cs.oose.fall2013.brickus.iface.BrickusModel;
 import edu.jhu.cs.oose.fall2013.brickus.iface.Player;
 
+/**
+ * The status bar panel
+ * @author yifan
+ *
+ */
 public class MyBrickusStatusBar extends JPanel {
 	public final static int HEIGHT = 20;
 	private MyBrickusFrame frame;
 	private JLabel messageLabel;
-
+	
+	/**
+	 * Initialize the status bar
+	 * @param frame
+	 */
 	public MyBrickusStatusBar(final MyBrickusFrame frame) {
 		this.frame = frame;
 		updateSize();
@@ -39,14 +48,11 @@ public class MyBrickusStatusBar extends JPanel {
 			public void modelChanged(BrickusEvent event) {
 				if (event.isGameOver()) {
 					BrickusModel model = frame.getModel();
-					int score1 = model.calculateScore(Player.PLAYER1);
-					int score2 = model.calculateScore(Player.PLAYER2);
-					if (score1 > score2)
-						updateMessage(Player.PLAYER1.toString() + " wins.");
-					else if (score1 < score2)
-						updateMessage(Player.PLAYER2.toString() + " wins.");
-					else
+					Player winner = MyBrickusUtils.getWinner(model);
+					if (winner == null)
 						updateMessage("Game ties.");
+					else
+						updateMessage(winner.toString() + " wins.");
 				} else if (event.isPlayerChanged()) {
 					updateMessage(frame.getModel().getActivePlayer().toString()
 							+ "'s turn.");
@@ -55,11 +61,17 @@ public class MyBrickusStatusBar extends JPanel {
 			}
 		});
 	}
-
+	/**
+	 * Update the message in the status bar.
+	 * @param text
+	 */
 	private void updateMessage(String text) {
 		messageLabel.setText(text);
 	}
-
+	
+	/**
+	 * Update the size of the bar.
+	 */
 	public void updateSize() {
 		setPreferredSize(new Dimension(frame.getWidth(), HEIGHT));
 	}

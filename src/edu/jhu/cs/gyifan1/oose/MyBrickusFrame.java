@@ -2,6 +2,7 @@ package edu.jhu.cs.gyifan1.oose;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.MenuItem;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -69,6 +70,7 @@ public class MyBrickusFrame extends javax.swing.JFrame {
 	private MyBrickusBoardPanel boardPanel;
 	private BrickusModel model;
 	private JButton passButton;
+	private JMenuItem passMenuItem;
 	private Map<Player, MyBrickusPieceTray> pieceTrays;
 	private MyBrickusPieceSelectionModel selectionModel;
 
@@ -80,7 +82,7 @@ public class MyBrickusFrame extends javax.swing.JFrame {
 	public MyBrickusFrame() {
 		super("Brickus");
 		setMinimumSize(new Dimension(MIN_WIDTH, MIN_HEIGHT));
-		setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+		setPreferredSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT));
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		addMenu();
 		newGame();
@@ -99,7 +101,7 @@ public class MyBrickusFrame extends javax.swing.JFrame {
 				.add(pieceTrays.get(Player.PLAYER2), BorderLayout.SOUTH);
 		rightPanel.add(pieceTrayHolderPanel, BorderLayout.NORTH);
 		rightPanel.add(passButton, BorderLayout.SOUTH);
-		rightPanel.add(new MyBrickusScorePanel(model), BorderLayout.CENTER);
+		pieceTrayHolderPanel.add(new MyBrickusScorePanel(model), BorderLayout.CENTER);
 		rightPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 		passButton.addActionListener(new ActionListener() {
 			@Override
@@ -117,7 +119,7 @@ public class MyBrickusFrame extends javax.swing.JFrame {
 		JMenuBar menuBar = new JMenuBar();
 		JMenu menu = new JMenu("Game");
 		JMenuItem newGameMenuItem = new JMenuItem("New game");
-		JMenuItem passMenuItem = new JMenuItem("Pass");
+		passMenuItem = new JMenuItem("Pass");
 		JMenuItem exitMenuItem = new JMenuItem("Exit");
 		// exit
 		exitMenuItem.addActionListener(new ActionListener() {
@@ -198,8 +200,10 @@ public class MyBrickusFrame extends javax.swing.JFrame {
 
 			@Override
 			public void modelChanged(BrickusEvent event) {
-				if (event.isGameOver())
+				if (event.isGameOver()) {
 					passButton.setEnabled(false);
+					passMenuItem.setEnabled(false);
+				}	
 			}
 		});
 

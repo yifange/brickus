@@ -40,8 +40,8 @@ public class MyBrickusPiecePanel extends MyBrickusGrid {
 	 * 
 	 * @param piece		The piece in the panel.
 	 * @param player	Which player this piece belongs to.
-	 * @param model
-	 * @param selectionModel
+	 * @param model		The {@link BrickusModel}
+	 * @param selectionModel The {@link MyBrickusPieceSelectionModel}
 	 */
 	public MyBrickusPiecePanel(BrickusPiece piece, Player player,
 			BrickusModel model, MyBrickusPieceSelectionModel selectionModel) {
@@ -54,14 +54,20 @@ public class MyBrickusPiecePanel extends MyBrickusGrid {
 		listeners = new HashSet<MyBrickusPieceSelectionChangeListener>();
 		biasX = (LAYOUT_COLS - piece.getWidth()) / 2;
 		biasY = (LAYOUT_ROWS - piece.getHeight()) / 2;
-		// setLayout(new GridLayout(LAYOUT_ROWS, LAYOUT_COLS));
 		addMouseListener(new MouseHandler());
 	}
-
+	
+	/**
+	 * Add listener to the piece panel.
+	 * @param listener		The listener to be added.
+	 */
 	public void addListener(MyBrickusPieceSelectionChangeListener listener) {
 		listeners.add(listener);
 	}
-
+	
+	/**
+	 * Draw the piece. Highlight the piece if selected.
+	 */
 	private void draw() {
 		boolean selected = (piece == selectionModel.getSelectedPiece());
 		for (int row = 0; row < LAYOUT_ROWS; row++)
@@ -79,23 +85,37 @@ public class MyBrickusPiecePanel extends MyBrickusGrid {
 				}
 			}
 	}
-
+	
+	/**
+	 * Get the piece the panel holds.
+	 * @return	the piece the panel holds.
+	 */
 	public BrickusPiece getPiece() {
 		return piece;
 	}
-
+	
+	/**
+	 * Fire an event, notifying the piece selection has changed.
+	 */
 	public void notifyPieceSelectionChanged() {
 		for (MyBrickusPieceSelectionChangeListener listener : listeners) {
 			listener.pieceSelectionChanged(selectionModel);
 		}
 	}
-
+	
+	/**
+	 * Paint the piece panel.
+	 */
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		draw();
 	}
-
+	
+	/**
+	 * Remove a certain listener.
+	 * @param listener		The listener to be removed.
+	 */
 	public void removeListener(MyBrickusPieceSelectionChangeListener listener) {
 		listeners.remove(listener);
 	}
