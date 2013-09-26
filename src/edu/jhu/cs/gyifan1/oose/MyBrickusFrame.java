@@ -12,6 +12,9 @@ import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
@@ -60,20 +63,43 @@ public class MyBrickusFrame extends javax.swing.JFrame {
 		rightPanel.add(new MyBrickusScorePanel(model), BorderLayout.CENTER);
 		rightPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 		passButton.addActionListener(new ActionListener() {
-			
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
+			public void actionPerformed(ActionEvent event) {
 				model.pass(model.getActivePlayer());
 			}
 		});
 		add(rightPanel, BorderLayout.EAST);
 	}
-
-	public MyBrickusFrame() {
-		super("Brickus");
+	private void addMenu() {
+		JMenuBar menuBar = new JMenuBar();
+		JMenu menu = new JMenu("Game");
+		JMenuItem newGameMenuItem = new JMenuItem("New game");
+		JMenuItem exitMenuItem = new JMenuItem("Exit");
+	  exitMenuItem.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				System.exit(0);
+			}
+		});
+	  newGameMenuItem.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				newGame();
+			}
+		});
+		menu.add(newGameMenuItem);
+		menu.add(exitMenuItem);
+		menuBar.add(menu);
+		setJMenuBar(menuBar);
+	}
+	private void newGame() {
+		getContentPane().removeAll();
+		getContentPane().revalidate();
+		getContentPane().repaint();
 		model = new StandardBrickusModel();
 		selectionModel = new MyBrickusPieceSelectionModel();
-		setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 		statusBar = new MyBrickusStatusBar(this);
 		boardPanel = new MyBrickusBoardPanel(this);
 		passButton = new JButton("Pass");
@@ -82,8 +108,6 @@ public class MyBrickusFrame extends javax.swing.JFrame {
 				.put(Player.PLAYER1, new MyBrickusPieceTray(this, Player.PLAYER1));
 		pieceTrays
 				.put(Player.PLAYER2, new MyBrickusPieceTray(this, Player.PLAYER2));
-		setMinimumSize(new Dimension(MIN_WIDTH, MIN_HEIGHT));
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		addComponents();
 		pack();
 		MouseHandler mouseHandler = new MouseHandler();
@@ -103,6 +127,15 @@ public class MyBrickusFrame extends javax.swing.JFrame {
 				
 			}
 		});
+		
+	}
+	public MyBrickusFrame() {
+		super("Brickus");
+		setMinimumSize(new Dimension(MIN_WIDTH, MIN_HEIGHT));
+		setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		addMenu();
+		newGame();
 	}
 
 	private class MouseHandler extends MouseAdapter {
