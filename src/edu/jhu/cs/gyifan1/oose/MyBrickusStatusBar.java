@@ -40,9 +40,9 @@ public class MyBrickusStatusBar extends JPanel {
 					int score1 = model.calculateScore(Player.PLAYER1);
 					int score2 = model.calculateScore(Player.PLAYER2);
 					if (score1 > score2)
-						updateMessage(Player.PLAYER1.toString() + "wins.");
+						updateMessage(Player.PLAYER1.toString() + " wins.");
 					else if (score1 < score2)
-						updateMessage(Player.PLAYER2.toString() + "wins.");
+						updateMessage(Player.PLAYER2.toString() + " wins.");
 					else
 						updateMessage("Game ties.");
 				} else if (event.isPlayerChanged()) {

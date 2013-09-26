@@ -27,7 +27,7 @@ public class MyBrickusPieceTray extends JPanel {
 	public void updateSize() {
 		int frameWidth = frame.getWidth();
 		int width = (int) (frameWidth * 0.4);
-		System.out.println(width);
+//		System.out.println(width);
 		setPreferredSize(new Dimension(width,
 				(int) (width * LAYOUT_ROWS / LAYOUT_COLS)));
 	}
@@ -59,6 +59,9 @@ public class MyBrickusPieceTray extends JPanel {
 					repaint();
 				}
 			});
+		}
+		for (int i = 0; i < LAYOUT_ROWS * LAYOUT_COLS - pieces.size(); i++) {
+			add(new JPanel());
 		}
 	}
 
