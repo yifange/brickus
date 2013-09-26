@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path=""/>
+	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="BrickusInterface.jar"/>
 	<classpathentry kind="lib" path="StandardBrickusModel.jar"/>
 	<classpathentry kind="lib" path="StandardBrickusUI.jar"/>
