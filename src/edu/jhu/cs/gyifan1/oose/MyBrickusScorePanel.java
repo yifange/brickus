@@ -1,5 +1,6 @@
 package edu.jhu.cs.gyifan1.oose;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.util.HashMap;
 import java.util.Map;
@@ -8,6 +9,8 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 
 import edu.jhu.cs.oose.fall2013.brickus.iface.BrickusEvent;
 import edu.jhu.cs.oose.fall2013.brickus.iface.BrickusIllegalMoveEvent;
@@ -19,12 +22,27 @@ public class MyBrickusScorePanel extends JPanel {
 	private Map<Player, JLabel> scoreLabels;
 	private BrickusModel model;
 	private void updateScores() {
-		System.out.println("he");
 		for (Player player : scoreLabels.keySet()) {
 			scoreLabels.get(player).setText(String.valueOf(model.calculateScore(player)));
 		}
 	}
-	public MyBrickusScorePanel(BrickusModel model) {
+	private void highlightPlayer(Player p) {
+		if (p == null) {
+			for (Player player : scoreLabels.keySet()) {
+				JLabel label = scoreLabels.get(player);
+				label.setBorder(BorderFactory.createCompoundBorder(new LineBorder(MyBrickusUtils.getPlayerColor(player)), new EmptyBorder(10, 10, 10, 10)));
+			}
+		} else {
+			for (Player player : scoreLabels.keySet()) {
+				JLabel label = scoreLabels.get(player);
+				if (p == player) 
+					label.setBorder(BorderFactory.createCompoundBorder(new LineBorder(MyBrickusUtils.getPlayerColor(player)), new EmptyBorder(10, 10, 10, 10)));
+				else
+					label.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+			}
+		}
+	}
+	public MyBrickusScorePanel(final BrickusModel model) {
 		this.model = model;
 		scoreLabels = new HashMap<Player, JLabel>();
 		scoreLabels.put(Player.PLAYER1, new JLabel("0"));
@@ -33,20 +51,24 @@ public class MyBrickusScorePanel extends JPanel {
 			JLabel label = scoreLabels.get(player);
 			label.setForeground(MyBrickusUtils.getPlayerColor(player));
 			label.setFont(new Font("Arial", Font.PLAIN, 30));
-			label.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
 		}
 		add(scoreLabels.get(Player.PLAYER1));
 		add(scoreLabels.get(Player.PLAYER2));
+		highlightPlayer(model.getActivePlayer());
 		
-//		updateScores();
 		model.addBrickusListener(new BrickusListener() {
 			
 			@Override
 			public void modelChanged(BrickusEvent event) {
-				if (event.isPlayerChanged() || event.isGameOver()) {
+				if (event.isPlayerChanged()) {
 					updateScores();
+					highlightPlayer(model.getActivePlayer());
 					repaint();
+				}
+				if (event.isGameOver()) {
+					updateScores();
+					Player player = MyBrickusUtils.getWinner(model);
+					highlightPlayer(player);
 				}
 			}
 			

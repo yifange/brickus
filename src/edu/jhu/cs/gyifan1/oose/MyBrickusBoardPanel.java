@@ -26,7 +26,7 @@ public class MyBrickusBoardPanel extends MyBrickusGrid {
 		int frameWidth = frame.getContentPane().getWidth();
 		int statusBarHeight = MyBrickusStatusBar.HEIGHT;
 		int height = frameHeight - statusBarHeight;
-		int width = (int) ((frameWidth - 10) * 0.6);
+		int width = (int) ((frameWidth - 60) * 0.6);
 		int side = height;
 		int border = 0;
 		if (width < height) {

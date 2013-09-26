@@ -10,6 +10,7 @@ import java.awt.event.MouseWheelEvent;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -29,8 +30,8 @@ public class MyBrickusFrame extends javax.swing.JFrame {
 	private MyBrickusBoardPanel boardPanel;
 	private Map<Player, MyBrickusPieceTray> pieceTrays;
 	private JButton passButton;
-	public final static int DEFAULT_WIDTH = 780, DEFAULT_HEIGHT = 500,
-			MIN_WIDTH = 780, MIN_HEIGHT = 500;
+	public final static int DEFAULT_WIDTH = 860, DEFAULT_HEIGHT = 500,
+			MIN_WIDTH = 860, MIN_HEIGHT = 500;
 
 	private void updateComponentSize() {
 		boardPanel.updateSize();
@@ -57,6 +58,7 @@ public class MyBrickusFrame extends javax.swing.JFrame {
 		rightPanel.add(pieceTrayHolderPanel, BorderLayout.NORTH);
 		rightPanel.add(passButton, BorderLayout.SOUTH);
 		rightPanel.add(new MyBrickusScorePanel(model), BorderLayout.CENTER);
+		rightPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 		passButton.addActionListener(new ActionListener() {
 			
 			@Override
