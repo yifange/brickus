@@ -70,12 +70,17 @@ public class MyBrickusPiecePanel extends MyBrickusGrid {
 	 */
 	private void draw() {
 		boolean selected = (piece == selectionModel.getSelectedPiece());
+		boolean active = (player == model.getActivePlayer());
 		for (int row = 0; row < LAYOUT_ROWS; row++)
 			for (int col = 0; col < LAYOUT_COLS; col++) {
 				setBorderColor(col, row, Color.black);
-				setFillColor(col, row, MyBrickusUtils.getPlayerColor(player));
 				if (piece.isOccupied(col - biasX, row - biasY)) {
-					setFillColor(col, row, MyBrickusUtils.getPlayerColor(player));
+					Color color;
+					if (active)
+						color = MyBrickusUtils.getPlayerColor(player);
+					else
+						color = MyBrickusUtils.getDisabledColor();
+					setFillColor(col, row, color);
 				} else {
 					if (selected)
 						setFillColor(col, row, Color.yellow);

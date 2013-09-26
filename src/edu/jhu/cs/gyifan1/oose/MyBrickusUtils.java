@@ -18,8 +18,14 @@ public class MyBrickusUtils {
 	public static Color getOverlappingColor() {
 		return new Color((float)1, (float)1, 0);
 	}
-
 	
+	/**
+	 * Get the color used when the piece cannot be selected.
+	 * @return color used when the piece cannot be selected.
+	 */
+	public static Color getDisabledColor() {
+		return Color.gray;
+	}
 	/**
 	 * For a given player, get the color. 
 	 * @param player	The player for whom to get the color.
