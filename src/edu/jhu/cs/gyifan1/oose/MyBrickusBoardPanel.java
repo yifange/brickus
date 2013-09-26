@@ -119,9 +119,7 @@ public class MyBrickusBoardPanel extends MyBrickusGrid {
 					if (piece.isOccupied(x, y)) {
 						Color color;
 						Color currentColor = getFillColor(cursorX + x, cursorY + y);
-						if (currentColor != Color.white
-								&& currentColor != MyBrickusUtils.getPlayerColor(model
-										.getActivePlayer()))
+						if (currentColor != Color.white)
 							color = MyBrickusUtils.getOverlappingColor();
 						else
 							color = MyBrickusUtils.getPlayerTransparentColor(model

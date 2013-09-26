@@ -11,6 +11,11 @@ import edu.jhu.cs.oose.fall2013.brickus.iface.BrickusModel;
 import edu.jhu.cs.oose.fall2013.brickus.iface.BrickusPiece;
 import edu.jhu.cs.oose.fall2013.brickus.iface.Player;
 
+/**
+ * The panel holding one Brickus piece.
+ * @author yifan
+ *
+ */
 public class MyBrickusPiecePanel extends MyBrickusGrid {
 	private class MouseHandler extends MouseAdapter {
 		@Override
@@ -21,23 +26,29 @@ public class MyBrickusPiecePanel extends MyBrickusGrid {
 			}
 		}
 	}
-	private final static int LAYOUT_COLS = 5, LAYOUT_ROWS = 5;
-	private int biasX, biasY;
-	private Color color;
+	private final static int LAYOUT_COLS = 5, LAYOUT_ROWS = 5; // The layout height and width, which are 5
+	private int biasX, biasY; // Used to make the piece shown in the center of the panel.
 	private Set<MyBrickusPieceSelectionChangeListener> listeners;
 	private BrickusModel model;
 	private BrickusPiece piece;
 	private Player player;
 
 	private MyBrickusPieceSelectionModel selectionModel;
-
+	
+	/**
+	 * Initialize a piece panel.
+	 * 
+	 * @param piece		The piece in the panel.
+	 * @param player	Which player this piece belongs to.
+	 * @param model
+	 * @param selectionModel
+	 */
 	public MyBrickusPiecePanel(BrickusPiece piece, Player player,
 			BrickusModel model, MyBrickusPieceSelectionModel selectionModel) {
 		super(LAYOUT_COLS, LAYOUT_ROWS);
 		this.piece = piece;
 		this.player = player;
 		this.model = model;
-		this.color = MyBrickusUtils.getPlayerColor(player);
 		this.selectionModel = selectionModel;
 
 		listeners = new HashSet<MyBrickusPieceSelectionChangeListener>();
